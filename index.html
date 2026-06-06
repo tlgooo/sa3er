@@ -3,224 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ميديا كيت المؤثر العربي - Sa3er</title>
+<title>سعّر - حاسبة المؤثرين</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap');
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:'IBM Plex Sans Arabic',sans-serif}
-body{background:#0a0a0a;color:#fff;padding:20px;min-height:100vh}
-.container{max-width:600px;margin:0 auto}
-
-h1{text-align:center;font-size:28px;margin-bottom:10px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
-.subtitle{text-align:center;color:#888;font-size:14px;margin-bottom:30px}
-
-.card{background:#1a1a1a;border:1px solid #333;border-radius:20px;padding:25px;margin-bottom:20px}
-.input-group{margin-bottom:18px}
-label{display:block;margin-bottom:8px;font-size:13px;color:#aaa;font-weight:600}
-input{width:100%;padding:14px;background:#0f0f0f;border:2px solid #333;border-radius:12px;color:#fff;font-size:15px;outline:none;transition:0.3s}
-input:focus{border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,0.1)}
-
-.btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;transition:0.3s;margin-top:10px}
-.btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(102,126,234,0.3)}
-.btn-admin{background:linear-gradient(135deg,#10b981 0%,#059669 100%);display:none}
-
-.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-.price-box{background:#0f0f0f;border:2px solid #333;border-radius:15px;padding:18px;text-align:center}
-.price-box.highlight{border-color:#667eea;background:rgba(102,126,234,0.1)}
-.price-label{font-size:12px;color:#888;margin-bottom:6px}
-.price-value{font-size:26px;font-weight:700;color:#667eea}
-
-#mediaKit{display:none;margin-top:30px}
-.page{background:#fff;color:#000;border-radius:20px;padding:40px;margin-bottom:20px;min-height:800px}
-.page h2{font-size:32px;margin-bottom:10px;color:#667eea}
-.page h3{font-size:20px;margin:30px 0 15px;color:#333}
-.page p{line-height:1.8;color:#555;margin-bottom:12px}
-
-.badge{display:inline-block;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:15px}
-
-.package-grid{display:grid;gap:12px;margin-top:20px}
-.package{background:#f8f9fa;border:2px solid #e0e0e0;border-radius:12px;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.package strong{color:#667eea;font-size:18px}
-
-.watermark{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#ccc;font-size:12px;z-index:1000}
-
-.proof-box{background:#f8f9fa;border-left:4px solid #667eea;padding:15px;border-radius:8px;margin:15px 0}
-.qr-placeholder{width:120px;height:120px;background:#e0e0e0;border-radius:12px;margin:20px auto;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px}
-
-@media print{.watermark{display:none}}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
+body{background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);padding:20px;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.container{max-width:520px;width:100%;background:#fff;border-radius:25px;padding:35px;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
+.logo{text-align:center;font-size:32px;font-weight:700;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.subtitle{text-align:center;color:#999;font-size:13px;margin-bottom:30px}
+.input-group{margin-bottom:22px}
+label{display:block;margin-bottom:8px;color:#555;font-weight:600;font-size:14px}
+input,select{width:100%;padding:14px;border:2px solid #e5e7eb;border-radius:12px;font-size:16px;outline:none;transition:0.3s;background:#fafafa}
+input:focus,select:focus{border-color:#667eea;background:#fff;box-shadow:0 0 0 3px rgba(102,126,234,0.1)}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;margin-top:12px;transition:0.3s;box-shadow:0 4px 15px rgba(102,126,234,0.3)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(102,126,234,0.4)}
+.btn-admin{background:linear-gradient(135deg,#10b981 0%,#059669 100%);display:none;box-shadow:0 4px 15px rgba(16,185,129,0.3)}
+.btn-admin:hover{box-shadow:0 8px 25px rgba(16,185,129,0.4)}
+.result{display:none;margin-top:35px;padding:35px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;color:#fff;text-align:center;animation:fadeIn 0.5s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.result-label{font-size:14px;opacity:0.9;margin-bottom:8px}
+.price{font-size:52px;font-weight:700;margin:12px 0;text-shadow:0 2px 10px rgba(0,0,0,0.2)}
+.price-details{font-size:13px;opacity:0.8;margin-top:10px}
+.watermark{margin-top:25px;font-size:12px;opacity:0.6;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px}
+.note{margin-top:20px;padding:12px;background:#fff3cd;border-left:4px solid #ffc107;border-radius:8px;font-size:12px;color:#856404;text-align:right}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>سعّر</h1>
-  <p class="subtitle">حاسبة ميديا كيت احترافية للمؤثرين</p>
+  <div class="logo">سعّر</div>
+  <div class="subtitle">حاسبة تسعير المؤثرين العرب</div>
 
-  <div class="card">
-    <div class="input-group">
-      <label>متوسط المشاهدات لكل ريل</label>
-      <input type="number" id="views" placeholder="مثال: 50000">
-    </div>
-
-    <div class="input-group">
-      <label>سعر الـ 1000 مشاهدة CPM بالدولار</label>
-      <input type="number" id="cpm" value="10" step="0.5">
-    </div>
-
-    <div class="input-group">
-      <label>سعر البوست - 1000 مشاهدة</label>
-      <input type="number" id="postPrice" placeholder="مثال: 150">
-    </div>
-
-    <div class="input-group">
-      <label>سعر الريل - 30 ثانية</label>
-      <input type="number" id="reelPrice" placeholder="مثال: 300">
-    </div>
-
-    <div class="input-group">
-      <label>سعر الستوري</label>
-      <input type="number" id="storyPrice" placeholder="مثال: 50">
-    </div>
-
-    <button class="btn" onclick="generateKit()">اعمل ميديا كيت بالأرقام دي</button>
-
-    <button class="btn btn-admin" id="adminBtn" onclick="downloadPDF(true)">🔑 تحميل PDF نضيف - للأدمن فقط</button>
+  <div class="input-group">
+    <label>🎯 التخصص</label>
+    <select id="niche">
+      <option value="1">عام - General</option>
+      <option value="1.5">فاينانس/استثمار - Finance</option>
+      <option value="1.4">تكنولوجيا - Tech</option>
+      <option value="1.3">موضة/بيوتي - Fashion</option>
+      <option value="1.2">لياقة/صحة - Fitness</option>
+      <option value="1">أكل - Food</option>
+      <option value="0.9">ترفيه - Entertainment</option>
+      <option value="0.8">كوميديا - Comedy</option>
+    </select>
   </div>
 
-  <div id="mediaKit">
-    <!-- صفحة 1: التسعير -->
-    <div class="page" id="page1">
-      <span class="badge">ميديا كيت 2026</span>
-      <h2>المؤثر العربي</h2>
-      <p style="color:#888;margin-bottom:30px">بيانات الأداء والتسعير</p>
+  <div class="input-group">
+    <label>👁️ متوسط المشاهدات لكل ريل</label>
+    <input type="number" id="views" placeholder="مثال: 50000" min="0">
+  </div>
 
-      <div class="pricing-grid">
-        <div class="price-box">
-          <div class="price-label">متوسط المشاهدات</div>
-          <div class="price-value" id="outViews">0</div>
-        </div>
-        <div class="price-box highlight">
-          <div class="price-label">سعر الريل</div>
-          <div class="price-value" id="outPrice">$0</div>
-        </div>
-      </div>
+  <div class="input-group">
+    <label>💰 سعر الـ 1000 مشاهدة CPM بالدولار</label>
+    <input type="number" id="cpm" value="10" step="0.5" min="1">
+  </div>
 
-      <h3>التسعير حسب CPM</h3>
-      <p>تم حساب السعر بناءً على معادلة: <strong>المشاهدات ÷ 1000 × CPM</strong></p>
-      <p style="margin-top:20px;font-size:13px;color:#999">CPM المستخدم: <span id="outCpm">10</span>$ لكل 1000 مشاهدة</p>
-    </div>
+  <button class="btn" onclick="calc()">🚀 احسب سعري</button>
+  <button class="btn btn-admin" id="adminBtn" onclick="downloadPDF(true)">🔑 تحميل PDF نضيف - للأدمن</button>
 
-    <!-- صفحة 2: الباقات -->
-    <div class="page" id="page2">
-      <span class="badge">الباقات والأسعار</span>
-      <h2>اختار الباقة المناسبة</h2>
-
-      <div class="package-grid">
-        <div class="package">
-          <span>ستوري 24 ساعة</span>
-          <strong id="packStory">$0</strong>
-        </div>
-        <div class="package">
-          <span>بوست صور</span>
-          <strong id="packPost">$0</strong>
-        </div>
-        <div class="package">
-          <span>ريل 30 ثانية</span>
-          <strong id="packReel">$0</strong>
-        </div>
-        <div class="package" style="background:linear-gradient(135deg,rgba(102,126,234,0.1) 0%,rgba(118,75,162,0.1) 100%);border-color:#667eea">
-          <span>باكدج 3 بوستات</span>
-          <strong id="packBundle">$0</strong>
-        </div>
-      </div>
-
-      <p style="margin-top:30px;font-size:13px;color:#999">جميع الأسعار بالدولار الأمريكي - الدفع مقدماً فودافون كاش</p>
-    </div>
-
-    <!-- صفحة 3: Proof -->
-    <div class="page" id="page3">
-      <span class="badge">لماذا أنا؟</span>
-      <h2>سابقة الأعمال</h2>
-
-      <div class="proof-box">
-        <strong>تعاونت مع:</strong>
-        <p>براندات محلية ودولية في مجالات التكنولوجيا، الموضة، والأكل</p>
-      </div>
-
-      <h3>تواصل معي</h3>
-      <p>انستجرام: @your_username</p>
-      <p>واتساب: +20 XXXX</p>
-
-      <div class="qr-placeholder">
-        QR Code<br>انستجرام
-      </div>
-
-      <p style="margin-top:40px;font-size:12px;color:#999;text-align:center">© 2026 جميع الحقوق محفوظة</p>
-    </div>
+  <div class="result" id="result">
+    <div class="result-label">سعر الريل 30 ثانية</div>
+    <div class="price" id="price">$0</div>
+    <div class="price-details" id="details">0 مشاهدة × 10$ CPM</div>
+    <div class="watermark">SA3ER.COM - النسخة المجانية</div>
+    <div class="note">💡 افتح الرابط +?admin=sa3er عشان تشيل العلامة المائية</div>
   </div>
 </div>
 
-<div class="watermark">SA3ER.COM - النسخة المجانية</div>
-
 <script>
-function generateKit(){
+function calc(){
   const views = parseFloat(document.getElementById('views').value) || 0;
   const cpm = parseFloat(document.getElementById('cpm').value) || 10;
-  const postPrice = document.getElementById('postPrice').value || views/1000*cpm*1.5;
-  const reelPrice = document.getElementById('reelPrice').value || views/1000*cpm*3;
-  const storyPrice = document.getElementById('storyPrice').value || views/1000*cpm*0.5;
+  const niche = parseFloat(document.getElementById('niche').value) || 1;
+  const nicheText = document.getElementById('niche').options[document.getElementById('niche').selectedIndex].text;
 
-  const price = views/1000*cpm;
+  if(views <= 0){
+    alert('دخل متوسط المشاهدات الأول يا معلم');
+    return;
+  }
 
-  document.getElementById('outViews').textContent = views.toLocaleString('en');
-  document.getElementById('outPrice').textContent = '$' + price.toFixed(0);
-  document.getElementById('outCpm').textContent = cpm;
+  const basePrice = views/1000*cpm;
+  const finalPrice = (basePrice * niche).toFixed(0);
 
-  document.getElementById('packStory').textContent = '$' + parseFloat(storyPrice).toFixed(0);
-  document.getElementById('packPost').textContent = '$' + parseFloat(postPrice).toFixed(0);
-  document.getElementById('packReel').textContent = '$' + parseFloat(reelPrice).toFixed(0);
-  document.getElementById('packBundle').textContent = '$' + (parseFloat(postPrice)*3*0.9).toFixed(0);
-
-  document.getElementById('mediaKit').style.display = 'block';
+  document.getElementById('price').textContent = '$' + finalPrice;
+  document.getElementById('details').textContent = views.toLocaleString('en') + ' مشاهدة × ' + cpm + '$ CPM × معامل ' + nicheText.split('-')[0];
+  document.getElementById('result').style.display = 'block';
 
   // إظهار زرار الأدمن لو الرابط فيه?admin=sa3er
   if(window.location.search.includes('admin=sa3er')){
-    document.getElementById('adminBtn').style.display = 'flex';
+    document.getElementById('adminBtn').style.display = 'block';
   }
 
-  window.scrollTo({top: document.getElementById('mediaKit').offsetTop, behavior: 'smooth'});
+  window.scrollTo({top: document.getElementById('result').offsetTop - 50, behavior: 'smooth'});
 }
 
 async function downloadPDF(isAdmin){
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'mm', 'a4');
 
-  const pages = ['page1', 'page2', 'page3'];
+  // صفحة بيضا نضيفة
+  pdf.setFillColor(255,255,255);
+  pdf.rect(0,0,210,297,'F');
 
-  for(let i=0; i<pages.length; i++){
-    const element = document.getElementById(pages[i]);
-    const canvas = await html2canvas(element, {scale: 2, backgroundColor: '#ffffff'});
-    const imgData = canvas.toDataURL('image/png');
+  // اللوجو
+  pdf.setFontSize(24);
+  pdf.setTextColor(102,126,234);
+  pdf.text('Sa3er', 105, 40, {align:'center'});
 
-    if(i > 0) pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-  }
+  pdf.setFontSize(14);
+  pdf.setTextColor(100);
+  pdf.text('Media Kit 2026', 105, 50, {align:'center'});
 
-  // لو مش أدمن ضيف علامة مائية
+  // السعر الكبير
+  pdf.setFontSize(48);
+  pdf.setTextColor(0);
+  pdf.text(document.getElementById('price').textContent, 105, 90, {align:'center'});
+
+  pdf.setFontSize(16);
+  pdf.text('سعر الريل 30 ثانية', 105, 105, {align:'center'});
+
+  // التفاصيل
+  pdf.setFontSize(12);
+  pdf.setTextColor(80);
+  const details = document.getElementById('details').textContent;
+  pdf.text(details, 105, 125, {align:'center'});
+
+  // خط فاصل
+  pdf.setDrawColor(200);
+  pdf.line(30, 140, 180, 140);
+
+  // بيانات التواصل
+  pdf.setFontSize(14);
+  pdf.setTextColor(0);
+  pdf.text('للتواصل والاعلانات:', 105, 155, {align:'center'});
+
+  pdf.setFontSize(12);
+  pdf.setTextColor(100);
+  pdf.text('Instagram: @your_username', 105, 170, {align:'center'});
+  pdf.text('Email: your@email.com', 105, 180, {align:'center'});
+  pdf.text('WhatsApp: +20 XXXX XXXX', 105, 190, {align:'center'});
+
+  // العلامة المائية - تتشال للأدمن
   if(!isAdmin){
     pdf.setFontSize(10);
+    pdf.setTextColor(180);
+    pdf.text('SA3ER.COM - النسخة المجانية', 105, 280, {align:'center'});
+  } else {
+    pdf.setFontSize(8);
     pdf.setTextColor(150);
-    pdf.text('SA3ER.COM - نسخة تجريبية', 105, 290, {align: 'center'});
+    pdf.text('Generated by Sa3er - Admin Version', 105, 280, {align:'center'});
   }
 
-  pdf.save('media-kit-sa3er.pdf');
+  const filename = isAdmin? 'media-kit-pro.pdf' : 'media-kit-free.pdf';
+  pdf.save(filename);
 }
 
-// تشغيل تلقائي لو فيه باراميتر
+// تشغيل بالـ Enter
+document.addEventListener('keypress', function(e){
+  if(e.key === 'Enter') calc();
+});
+
+// تشغيل تلقائي لو فيه باراميتر أدمن
 window.onload = function(){
   if(window.location.search.includes('admin=sa3er')){
-    console.log('وضع الأدمن مفعل');
+    console.log('وضع الأدمن مفعل - العلامة المائية هتتشال');
   }
 }
 </script>
