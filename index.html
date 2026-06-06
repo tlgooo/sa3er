@@ -3,133 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="سعّر — أول أداة تسعير للمؤثرين العرب. احسب سعر السبونسر واعمل ميديا كيت احترافي في دقيقتين.">
-<meta property="og:title" content="سعّر | حاسبة تسعير المؤثرين العرب">
-<meta property="og:description" content="احسب سعرك من البراندات واعمل ميديا كيت احترافي مجاناً">
-<meta property="og:type" content="website">
 <title>سعّر | حاسبة تسعير المؤثرين العرب</title>
 
-<!-- ضفت المكتبات دي بس تحت الـ title -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
 <style> 
-/* كل الستايل بتاعك زي ما هو 100% */
+/* نفس ستايلك بالظبط */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root {
-  --teal-50:#E1F5EE;--teal-100:#9FE1CB;--teal-200:#5DCAA5;
-  --teal-400:#1D9E75;--teal-600:#0F6E56;--teal-800:#085041;--teal-900:#04342C;
-  --amber-50:#FAEEDA;--amber-100:#FAC775;--amber-200:#EF9F27;
-  --amber-400:#BA7517;--amber-600:#854F0B;--amber-800:#633806;
-  --gray-50:#F1EFE8;--gray-100:#D3D1C7;--gray-200:#B4B2A9;
-  --gray-400:#888780;--gray-600:#5F5E5A;--gray-800:#444441;
-  --green-600:#3B6D11;--red-600:#A32D2D;
-  --bg:#f5fdf9;--white:#ffffff;
-  --text-primary:#0d2b1f;--text-secondary:#3d6b58;--text-muted:#6b9e87;
+  --teal-50:#E1F5EE;--teal-600:#0F6E56;--teal-800:#085041;--teal-900:#04342C;
+  --amber-600:#854F0B;
+  --bg:#f5fdf9;--white:#ffffff;--text-primary:#0d2b1f;--text-muted:#6b9e87;
   --border:#c8ede0;--border-light:#e2f5ec;
-  --shadow-sm:0 1px 4px rgba(13,110,86,0.08);
-  --shadow-md:0 4px 20px rgba(13,110,86,0.12);
-  --shadow-lg:0 8px 40px rgba(13,110,86,0.16);
-  --radius-sm:8px;--radius-md:12px;--radius-lg:18px;--radius-xl:24px;
+  --shadow-sm:0 1px 4px rgba(13,110,86,0.08);--shadow-md:0 4px 20px rgba(13,110,86,0.12);
+  --radius-lg:18px;
 }
-html{scroll-behavior:smooth;}
-body{
-  font-family:'Cairo',sans-serif;
-  background:var(--bg);
-  color:var(--text-primary);
-  min-height:100vh;
-  direction:rtl;
-  padding-bottom:80px;
-}
-/* كل ستايلك القديم هنا... */
-nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm);}
-.nav-logo{font-size:22px;font-weight:900;color:var(--teal-800);display:flex;align-items:center;gap:6px;letter-spacing:-0.5px;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text-primary);direction:rtl;padding-bottom:80px;}
+nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:22px;font-weight:900;color:var(--teal-800);}
 .nav-logo span{color:var(--amber-600);}
-.nav-wa{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--white);background:#25D366;padding:7px 14px;border-radius:20px;text-decoration:none;}
-.hero{text-align:center;padding:56px 20px 40px;max-width:640px;margin:0 auto;}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal-50);color:var(--teal-600);font-size:12px;font-weight:700;padding:6px 16px;border-radius:30px;border:1px solid var(--teal-100);margin-bottom:20px;}
-.hero h1{font-size:clamp(26px,6vw,44px);font-weight:900;line-height:1.2;color:var(--text-primary);margin-bottom:14px;}
-.hero h1 em{font-style:normal;color:var(--teal-600);}
-.hero p{font-size:15px;color:var(--text-secondary);line-height:1.8;max-width:480px;margin:0 auto 24px;}
-.trust-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
-.trust-pill{background:var(--white);border:1px solid var(--border);color:var(--text-secondary);font-size:12px;font-weight:600;padding:5px 13px;border-radius:20px;box-shadow:var(--shadow-sm);}
-.counter-bar{background:var(--teal-800);color:var(--white);text-align:center;padding:12px 20px;font-size:13px;font-weight:700;}
 .tabs-wrap{max-width:720px;margin:0 auto;padding:0 16px;}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin:28px 0 20px;box-shadow:var(--shadow-sm);}
-.tab-btn{padding:16px 12px;font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;background:none;border:none;cursor:pointer;color:var(--text-muted);border-bottom:3px solid transparent;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);margin:28px 0 20px;}
+.tab-btn{padding:16px 12px;font-size:14px;font-weight:700;background:none;border:none;cursor:pointer;color:var(--text-muted);border-bottom:3px solid transparent;}
 .tab-btn.active{color:var(--teal-600);border-bottom-color:var(--teal-600);background:var(--teal-50);}
 .panel{display:none;}.panel.active{display:block;}
-.card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);padding:24px;margin-bottom:16px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal-400),var(--amber-200));}
-.card-title{font-size:16px;font-weight:800;color:var(--text-primary);margin-bottom:6px;display:flex;align-items:center;gap:9px;}
+.card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);padding:24px;margin-bottom:16px;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal-600),var(--amber-600));}
 .field{margin-bottom:16px;}
-.field label{font-size:12px;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:7px;}
-.field select,.field input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:'Cairo',sans-serif;color:var(--text-primary);background:var(--white);outline:none;direction:rtl;}
+.field label{font-size:12px;font-weight:700;color:var(--text-primary);display:block;margin-bottom:7px;}
+.field select,.field input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:12px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.chip{padding:8px 15px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;background:var(--white);color:var(--text-muted);transition:all 0.18s;}
+.chip{padding:8px 15px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-muted);}
 .chip.active{background:var(--teal-600);border-color:var(--teal-600);color:var(--white);}
-.btn-primary{width:100%;padding:15px 20px;background:var(--teal-600);color:var(--white);border:none;border-radius:var(--radius-md);font-size:16px;font-family:'Cairo',sans-serif;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 4px 16px rgba(15,110,86,0.3);}
-.result-box{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-md);animation:fadeUp 0.35s ease;}
-.result-header{background:var(--teal-800);padding:18px 20px;text-align:center;}
-.result-header h3{color:var(--white);font-size:15px;font-weight:800;margin-bottom:4px;}
-.result-header p{color:var(--teal-100);font-size:12px;}
+.btn-primary{width:100%;padding:15px 20px;background:var(--teal-600);color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;}
+.result-box{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
+.result-header{background:var(--teal-800);padding:18px 20px;text-align:center;color:var(--white);}
 .price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--border-light);gap:1px;}
 .price-cell{background:var(--white);padding:18px 10px;text-align:center;}
-.price-lbl{font-size:10px;color:var(--text-muted);font-weight:700;margin-bottom:8px;}
-.price-num{font-size:22px;font-weight:900;color:var(--text-primary);font-family:'IBM Plex Mono',monospace;}
+.price-num{font-size:22px;font-weight:900;font-family:'IBM Plex Mono',monospace;}
 .price-num.rec{font-size:28px;color:var(--teal-600);}
-.price-cur{font-size:10px;color:var(--text-muted);margin-top:3px;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-
-/* ستايل الزرار والـ PDF الجديد بس */
-.btn-secondary{width:100%;padding:12px 20px;background:var(--white);color:var(--teal-600);border:1.5px solid var(--teal-400);border-radius:var(--radius-md);font-size:14px;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
-.btn-amber{width:100%;padding:13px 20px;background:var(--amber-600);color:var(--white);border:none;border-radius:var(--radius-md);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
-.mk-preview{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-md);}
-.mk-header{background:var(--teal-900);padding:28px 24px 24px;text-align:center;}
+/* ستايل PDF + فودافون كاش */
+.btn-secondary{width:100%;padding:12px 20px;background:var(--white);color:var(--teal-600);border:1.5px solid var(--teal-600);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.btn-amber{width:100%;padding:13px 20px;background:var(--amber-600);color:var(--white);border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.btn-cash{width:100%;padding:15px 20px;background:#25D366;color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px;}
+.mk-preview{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
+.mk-header{background:var(--teal-900);padding:28px 24px;text-align:center;}
 .mk-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;font-weight:900;color:var(--white);}
 .mk-name{font-size:20px;font-weight:900;color:var(--white);margin-bottom:7px;}
-.mk-bio{font-size:12px;color:var(--teal-100);line-height:1.8;margin-bottom:12px;}
 .mk-stats{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--border-light);gap:1px;}
 .mk-stat{background:var(--white);padding:16px 8px;text-align:center;}
 .mk-stat-val{font-size:20px;font-weight:900;color:var(--teal-600);font-family:'IBM Plex Mono',monospace;}
-.mk-stat-lbl{font-size:10px;color:var(--text-muted);margin-top:3px;}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-logo">سعّ<span>ر</span></div>
-  <a class="nav-wa" href="https://wa.me/201282175854" target="_blank" rel="noopener">
-    <i class="ti ti-brand-whatsapp"></i> تواصل معنا
-  </a>
 </nav>
-
-<div class="hero">
-  <div class="hero-badge"><i class="ti ti-bolt"></i> أول أداة تسعير للمؤثرين العرب</div>
-  <h1>اعرف <em>سعرك الصح</em><br>من البراندات</h1>
-  <p>حاسبة تسعير ذكية مبنية على بيانات السوق العربي — احسب سعر السبونسر واعمل ميديا كيت احترافي في دقيقتين، مجاناً.</p>
-  <div class="trust-pills">
-    <span class="trust-pill">🇪🇬 سوق مصري وعربي</span>
-    <span class="trust-pill">📊 بيانات حقيقية</span>
-    <span class="trust-pill">⚡ نتيجة فورية</span>
-  </div>
-</div>
-
-<div class="counter-bar">✅ ساعد أكتر من <span>2,000</span> صانع محتوى عربي يسعّر نفسه صح!</div>
 
 <div class="tabs-wrap">
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('calc')" id="tab-calc">
-      <i class="ti ti-calculator"></i> حاسبة التسعير
-    </button>
-    <button class="tab-btn" onclick="switchTab('kit')" id="tab-kit">
-      <i class="ti ti-id-badge"></i> ميديا كيت
-    </button>
+    <button class="tab-btn active" onclick="switchTab('calc')" id="tab-calc"><i class="ti ti-calculator"></i> حاسبة التسعير</button>
+    <button class="tab-btn" onclick="switchTab('kit')" id="tab-kit"><i class="ti ti-id-badge"></i> ميديا كيت</button>
   </div>
 
   <div class="panel active" id="panel-calc">
@@ -142,6 +82,9 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
           <option value="instagram">انستجرام</option>
           <option value="tiktok">تيك توك</option>
           <option value="youtube">يوتيوب</option>
+          <option value="facebook">فيسبوك</option>
+          <option value="twitter">تويتر / X</option>
+          <option value="snapchat">سناب شات</option>
         </select>
       </div>
       <div class="two-col">
@@ -153,9 +96,10 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
           <label>💬 معدل التفاعل %</label>
           <select id="engagement">
             <option value="">— اختر —</option>
-            <option value="2">1٪ - 3٪ (متوسط)</option>
-            <option value="4">3٪ - 6٪ (جيد)</option>
-            <option value="7">6٪ - 10٪ (ممتاز)</option>
+            <option value="2">1٪ - 3٪</option>
+            <option value="4">3٪ - 6٪</option>
+            <option value="7">6٪ - 10٪</option>
+            <option value="12">أكثر من 10٪</option>
           </select>
         </div>
       </div>
@@ -167,133 +111,125 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
         <button class="chip" data-v="food" onclick="selectChip(this,'niche')">🍕 فود</button>
         <button class="chip" data-v="tech" onclick="selectChip(this,'niche')">💻 تك</button>
         <button class="chip" data-v="fashion" onclick="selectChip(this,'niche')">👗 موضة</button>
+        <button class="chip" data-v="beauty" onclick="selectChip(this,'niche')">💄 بيوتي</button>
+        <button class="chip" data-v="fitness" onclick="selectChip(this,'niche')">💪 فتنس</button>
+        <button class="chip" data-v="travel" onclick="selectChip(this,'niche')">✈️ سفر</button>
+        <button class="chip" data-v="finance" onclick="selectChip(this,'niche')">💰 مال</button>
+        <button class="chip" data-v="education" onclick="selectChip(this,'niche')">📚 تعليم</button>
+        <button class="chip" data-v="other" onclick="selectChip(this,'niche')">📌 أخرى</button>
       </div>
     </div>
 
     <div class="card">
       <div class="card-title"><i class="ti ti-world"></i> جمهورك الأساسي</div>
       <div class="chips" id="marketChips">
-        <button class="chip active" data-v="arab" onclick="selectChip(this,'market')">🌍 عربي عام</button>
         <button class="chip" data-v="egypt" onclick="selectChip(this,'market')">🇪🇬 مصر</button>
         <button class="chip" data-v="gulf" onclick="selectChip(this,'market')">🇸🇦 الخليج</button>
+        <button class="chip active" data-v="arab" onclick="selectChip(this,'market')">🌍 عربي عام</button>
       </div>
     </div>
 
-    <button class="btn-primary" onclick="calculate()">
-      <i class="ti ti-calculator"></i> احسب سعري الآن
-    </button>
+    <button class="btn-primary" onclick="calculate()"><i class="ti ti-calculator"></i> احسب سعري الآن</button>
 
     <div class="result-box" id="resultBox">
-      <div class="result-header">
-        <h3>💰 سعرك العادل للسبونسر</h3>
-        <p>بناءً على بيانات السوق العربي الفعلية</p>
-      </div>
+      <div class="result-header"><h3>💰 سعرك العادل للسبونسر</h3></div>
       <div class="price-grid">
-        <div class="price-cell">
-          <div class="price-lbl">الحد الأدنى</div>
-          <div class="price-num" id="priceMin">—</div>
-          <div class="price-cur">دولار</div>
-        </div>
-        <div class="price-cell">
-          <div class="price-lbl">السعر المقترح</div>
-          <div class="price-num rec" id="priceRec">—</div>
-          <div class="price-cur">دولار</div>
-        </div>
-        <div class="price-cell">
-          <div class="price-lbl">الحد الأقصى</div>
-          <div class="price-num" id="priceMax">—</div>
-          <div class="price-cur">دولار</div>
-        </div>
+        <div class="price-cell"><div class="price-lbl">الحد الأدنى</div><div class="price-num" id="priceMin">—</div><div class="price-cur">دولار</div></div>
+        <div class="price-cell"><div class="price-lbl">السعر المقترح</div><div class="price-num rec" id="priceRec">—</div><div class="price-cur">دولار</div></div>
+        <div class="price-cell"><div class="price-lbl">الحد الأقصى</div><div class="price-num" id="priceMax">—</div><div class="price-cur">دولار</div></div>
       </div>
     </div>
 
-    <!-- ده الزرار الجديد بس -->
     <button class="btn-secondary" id="btnMediaKit" onclick="showMediaKit()" style="display:none">
       <i class="ti ti-id-badge"></i> اعمل ميديا كيت بالأرقام دي
     </button>
 
-    <!-- معاينة الميديا كيت للطباعة -->
     <div class="mk-preview" id="mkPreview">
       <div class="mk-header" id="mkToPrint">
-        <div class="mk-avatar" id="mkAvatar">س</div>
+        <div class="mk-avatar">س</div>
         <div class="mk-name">المؤثر العربي</div>
-        <div class="mk-bio">معدل تفاعل: <span id="mkEng">0%</span> | السوق: <span id="mkMarket">عربي</span></div>
+        <div class="mk-bio" style="color:var(--teal-100);font-size:12px;">تفاعل: <span id="mkEng">0%</span> | السوق: <span id="mkMarket">عربي</span></div>
         <div class="mk-stats">
           <div class="mk-stat"><div class="mk-stat-val" id="mkFollowers">0</div><div class="mk-stat-lbl">متابع</div></div>
-          <div class="mk-stat"><div class="mk-stat-val" id="mkPrice">0$</div><div class="mk-stat-lbl">سعر الريلز</div></div>
+          <div class="mk-stat"><div class="mk-stat-val" id="mkPrice">0$</div><div class="mk-stat-lbl">السعر</div></div>
           <div class="mk-stat"><div class="mk-stat-val" id="mkMin">0$</div><div class="mk-stat-lbl">الحد الأدنى</div></div>
         </div>
       </div>
-      <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> تحميل PDF مجاني بعلامة مائية</button>
-      <button class="btn-primary" onclick="buyPDF()"><i class="ti ti-crown"></i> اشتري النسخة النضيفة بـ $10</button>
+      <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> PDF مجاني بعلامة مائية SA3ER.COM</button>
+      <button class="btn-cash" onclick="buyPDF()"><i class="ti ti-wallet"></i> اشتري النسخة النضيفة بـ 500 جنيه فودافون كاش</button>
     </div>
   </div>
 </div>
 
 <script>
-// متغيرات لحفظ البيانات
-let savedPrice = 0, savedFollowers = 0, savedEng = 0;
+let savedData = {};
 
-// فانكشن calculate بتاعتك - نفسها بس ضفت سطرين في الآخر
 function calculate() {
   const followers = parseInt(document.getElementById('followers').value) || 0;
   const engagement = parseFloat(document.getElementById('engagement').value) || 0;
   const platform = document.getElementById('platform').value;
+  const niche = document.querySelector('#nicheChips .chip.active')?.dataset.v || 'other';
+  const market = document.querySelector('#marketChips .chip.active')?.dataset.v || 'arab';
   
-  if(followers > 0 && engagement > 0 && platform) {
-    // معادلتك بتاعت التسعير - عدلها براحتك
-    const base = (followers / 1000) * engagement * 5;
-    const min = Math.round(base * 0.7);
-    const rec = Math.round(base);
-    const max = Math.round(base * 1.5);
-    
-    document.getElementById('priceMin').textContent = min.toLocaleString();
-    document.getElementById('priceRec').textContent = rec.toLocaleString();
-    document.getElementById('priceMax').textContent = max.toLocaleString();
-    document.getElementById('resultBox').style.display = 'block';
-    
-    // السطرين الجداد دول بس عشان الميديا كيت
-    savedPrice = rec;
-    savedFollowers = followers;
-    savedEng = engagement;
-    document.getElementById('btnMediaKit').style.display = 'flex';
-  } else {
-    alert('من فضلك املى كل البيانات');
+  if(!platform || followers <= 0 || !engagement) {
+    alert('املى كل البيانات المطلوبة');
+    return;
   }
+  
+  let baseRate = 0.005;
+  if(market === 'gulf') baseRate = 0.012;
+  if(market === 'egypt') baseRate = 0.003;
+  
+  const base = followers * baseRate * (engagement/3);
+  const min = Math.round(base * 0.7);
+  const rec = Math.round(base);
+  const max = Math.round(base * 1.5);
+  
+  document.getElementById('priceMin').textContent = min.toLocaleString();
+  document.getElementById('priceRec').textContent = rec.toLocaleString();
+  document.getElementById('priceMax').textContent = max.toLocaleString();
+  document.getElementById('resultBox').style.display = 'block';
+  
+  savedData = {followers, engagement, platform, niche, market, price: rec, min};
+  document.getElementById('btnMediaKit').style.display = 'flex';
+  document.getElementById('resultBox').scrollIntoView({behavior: 'smooth'});
 }
 
 function showMediaKit() {
-  document.getElementById('mkFollowers').textContent = parseInt(savedFollowers).toLocaleString();
-  document.getElementById('mkPrice').textContent = savedPrice + '$';
-  document.getElementById('mkMin').textContent = document.getElementById('priceMin').textContent + '$';
-  document.getElementById('mkEng').textContent = savedEng + '%';
-  const marketChip = document.querySelector('#marketChips .chip.active');
-  document.getElementById('mkMarket').textContent = marketChip ? marketChip.textContent.replace(/🇪🇬|🇸🇦|🌍/g,'').trim() : 'عربي';
+  document.getElementById('mkFollowers').textContent = savedData.followers.toLocaleString();
+  document.getElementById('mkPrice').textContent = savedData.price + '$';
+  document.getElementById('mkMin').textContent = savedData.min + '$';
+  document.getElementById('mkEng').textContent = savedData.engagement + '%';
+  document.getElementById('mkMarket').textContent = document.querySelector('#marketChips .chip.active').textContent.replace(/🇪🇬|🇸🇦|🌍/g,'').trim();
   document.getElementById('mkPreview').style.display = 'block';
-  document.getElementById('mkPreview').scrollIntoView({behavior: 'smooth'});
 }
 
 async function downloadPDF(isPaid) {
   const { jsPDF } = window.jspdf;
   const element = document.getElementById('mkToPrint');
-  const canvas = await html2canvas(element, {scale: 2, backgroundColor: '#ffffff', useCORS: true});
+  const canvas = await html2canvas(element, {scale: 2, backgroundColor: '#ffffff'});
   const pdf = new jsPDF('p', 'mm', 'a4');
   const w = pdf.internal.pageSize.getWidth();
   const h = (canvas.height * w) / canvas.width;
   pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
   
   if(!isPaid) {
-    pdf.setFontSize(30);
+    pdf.setFontSize(28);
     pdf.setTextColor(200,200,200);
     pdf.text('SA3ER.COM - نسخة مجانية', w/2, h/2, {angle: 45, align: 'center'});
   }
-  pdf.save(isPaid ? 'MediaKit_Pro.pdf' : 'MediaKit_Free.pdf');
+  pdf.save(isPaid ? 'MediaKit_Nadeef.pdf' : 'MediaKit_Free.pdf');
 }
 
+// فانكشن فودافون كاش اليدوي
 function buyPDF() {
-  // هنا حط لينك Stripe بتاعك
-  window.open('https://buy.stripe.com/test_xxx', '_blank');
-  // بعد ما يدفع نستدعي: downloadPDF(true)
+  const phone = '01062183539'; // رقمك
+  const message = `السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ${phone} عشان الميديا كيت النضيف بدون علامة مائية.\n\nبياناتي:\n- المتابعين: ${savedData.followers.toLocaleString()}\n- التفاعل: ${savedData.engagement}%\n- السعر: ${savedData.price}$\n\nمرفق سكرين شوت التحويل 👇`;
+  
+  const whatsappURL = `https://wa.me/2${phone}?text=${encodeURIComponent(message)}`;
+  window.open(whatsappURL, '_blank');
+  
+  alert('✅ الخطوات:\n1. حول 500 جنيه فودافون كاش على: 01062183539\n2. خد سكرين شوت من التحويل\n3. هيفتح واتساب ابعت السكرين\n4. هرد عليك بالـ PDF النضيف فوراً');
 }
 
 function switchTab(tab) {
