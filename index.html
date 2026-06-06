@@ -3,200 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سعّر - حاسبة المؤثرين</title>
+<title>سعّر | حاسبة تسعير المؤثرين العرب</title>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
-body{background:#f5f5f5;padding:20px;min-height:100vh}
-.container{max-width:500px;margin:0 auto}
 
-.header{text-align:center;margin-bottom:25px}
-.logo{font-size:36px;font-weight:700;color:#1a5d1a;margin-bottom:5px}
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-.card{background:#fff;border-radius:20px;padding:25px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+<style> 
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root {
+  --teal-50:#E1F5EE;--teal-600:#0F6E56;--teal-800:#085041;--teal-900:#04342C;
+  --amber-600:#854F0B;--bg:#f5fdf9;--white:#ffffff;--text-primary:#0d2b1f;--text-secondary:#3d6b58;--text-muted:#6b9e87;
+  --border:#c8ede0;--border-light:#e2f5ec;
+  --radius-lg:18px;
+}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text-primary);direction:rtl;padding-bottom:80px;}
+nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:22px;font-weight:900;color:var(--teal-800);}
+.nav-logo span{color:var(--amber-600);}
 
-.pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;margin-bottom:20px}
-.price-box{padding:15px}
-.price-label{font-size:12px;color:#666;margin-bottom:5px}
-.price-value{font-size:28px;font-weight:700;color:#1a5d1a}
-.price-value.main{color:#2d8f2d;font-size:32px}
-.currency{font-size:12px;color:#666}
+.hero{text-align:center;padding:56px 20px 40px;max-width:640px;margin:0 auto;}
+.hero h1{font-size:clamp(28px,6vw,44px);font-weight:900;line-height:1.2;margin-bottom:14px;}
+.hero h1 em{color:var(--teal-600);font-style:normal;}
+.hero p{font-size:16px;color:var(--text-secondary);font-weight:600;}
 
-.btn-outline{width:100%;padding:14px;border:2px solid #1a5d1a;border-radius:12px;background:#fff;color:#1a5d1a;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:15px}
-
-.media-kit{background:#0a3d2a;border-radius:20px;padding:30px;color:#fff;text-align:center;margin-bottom:15px}
-.circle-logo{width:70px;height:70px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:32px;font-weight:700}
-.title{font-size:24px;font-weight:700;margin-bottom:8px}
-.subtitle{font-size:13px;opacity:0.8;margin-bottom:25px}
-
-.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;background:#fff;border-radius:12px;padding:20px;color:#000}
-.stat-box{text-align:center}
-.stat-value{font-size:22px;font-weight:700;color:#1a5d1a;margin-bottom:3px}
-.stat-label{font-size:12px;color:#666}
-
-.btn-brown{width:100%;padding:16px;background:#8b5a2b;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-green{width:100%;padding:16px;background:#10b981;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-green small{display:block;font-size:12px;font-weight:400;margin-top:3px}
-
-.hidden{display:none}
-
-/* صفحات الـ PDF */
-.pdf-page{background:#fff;color:#000;padding:40px;min-height:800px;display:none}
-.pdf-page h2{color:#1a5d1a;font-size:28px;margin-bottom:10px}
-.pdf-page h3{color:#333;font-size:18px;margin:25px 0 15px}
-.pdf-package{background:#f8f9fa;border:2px solid #e0e0e0;border-radius:10px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between}
-.pdf-package strong{color:#1a5d1a;font-size:16px}
+.tabs-wrap{max-width:720px;margin:0 auto;padding:0 16px;}
+.card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);padding:24px;margin-bottom:16px;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal-600),var(--amber-600));}
+.field{margin-bottom:16px;}
+.field label{font-size:12px;font-weight:700;color:var(--text-primary);display:block;margin-bottom:7px;}
+.field select,.field input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:12px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.chip{padding:8px 15px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-muted);}
+.chip.active{background:var(--teal-600);border-color:var(--teal-600);color:var(--white);}
+.btn-primary{width:100%;padding:15px 20px;background:var(--teal-600);color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;}
+.result-box{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
+.result-header{background:var(--teal-800);padding:18px 20px;text-align:center;color:var(--white);}
+.price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--border-light);gap:1px;}
+.price-cell{background:var(--white);padding:18px 10px;text-align:center;}
+.price-lbl{font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:700;}
+.price-num{font-size:22px;font-weight:900;font-family:'IBM Plex Mono',monospace;}
+.price-num.rec{font-size:28px;color:var(--teal-600);}
+.price-cur{font-size:12px;color:var(--text-muted);font-weight:700;}
+.btn-secondary{width:100%;padding:12px 20px;background:var(--white);color:var(--teal-600);border:1.5px solid var(--teal-600);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.btn-amber{width:100%;padding:13px 20px;background:var(--amber-600);color:var(--white);border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.btn-cash{width:100%;padding:15px 20px;background:#25D366;color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px;}
+.btn-admin{width:100%;padding:15px 20px;background:#4CAF50;color:var(--white);border:3px dashed #fff;box-shadow:0 0 0 4px #4CAF50;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;display:none;align-items:center;justify-content:center;gap:9px;margin-top:12px;}
+.mk-preview{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
+.mk-header{background:var(--teal-900);padding:28px 24px;text-align:center;}
+.mk-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;font-weight:900;color:var(--white);}
+.mk-name{font-size:20px;font-weight:900;color:var(--white);margin-bottom:7px;}
+.mk-stats{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--border-light);gap:1px;margin-top:20px;}
+.mk-stat{background:var(--white);padding:16px 8px;text-align:center;}
+.mk-stat-val{font-size:20px;font-weight:900;color:var(--teal-600);font-family:'IBM Plex Mono',monospace;}
+.mk-stat-lbl{font-size:11px;color:var(--text-muted);margin-top:4px;font-weight:700;}
 </style>
 </head>
 <body>
-<div class="container">
-  <!-- الهيدر -->
-  <div class="header">
-    <div class="logo">سعّر</div>
-  </div>
 
-  <!-- كارد التسعير -->
-  <div class="card">
-    <div class="pricing-grid">
-      <div class="price-box">
-        <div class="price-label">الحد الأدنى</div>
-        <div class="price-value" id="minPrice">467</div>
-        <div class="currency">دولار</div>
-      </div>
-      <div class="price-box">
-        <div class="price-label">السعر المقترح</div>
-        <div class="price-value main" id="mainPrice">667</div>
-        <div class="currency">دولار</div>
-      </div>
-      <div class="price-box">
-        <div class="price-label">الحد الأقصى</div>
-        <div class="price-value" id="maxPrice">1,000</div>
-        <div class="currency">دولار</div>
-      </div>
-    </div>
-    <button class="btn-outline" onclick="showKit()">اعمل ميديا كيت بالأرقام دي 📸</button>
-  </div>
+<nav>
+  <div class="nav-logo">سعّ<span>ر</span></div>
+</nav>
 
-  <!-- الميديا كيت -->
-  <div id="mediaKitSection" class="hidden">
-    <div class="media-kit" id="kitToPrint">
-      <div class="circle-logo">س</div>
-      <div class="title">المؤثر العربي</div>
-      <div class="subtitle">تفاعل: 2% | السوق: مصر</div>
-
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-value" id="statMin">467$</div>
-          <div class="stat-label">الحد الأدنى</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value" id="statMain">667$</div>
-          <div class="stat-label">السعر</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value" id="statFollowers">333,333</div>
-          <div class="stat-label">متابع</div>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn-brown" onclick="downloadPDF(false)">📥 PDF مجاني بعلامة مائية SA3ER.COM</button>
-    <button class="btn-green" onclick="downloadPDF(true)">💳 اشتري النسخة النضيفة بـ 500 جنيه فودافون كاش <small>بدون علامة مائية</small></button>
-  </div>
+<div class="hero">
+  <h1>اعرف <em>سعرك الصح</em><br>من البراندات</h1>
+  <p>أداة تسعير احترافية للمؤثرين العرب - مش موجودة في أي مكان تاني</p>
 </div>
 
-<!-- صفحات مخفية للـ PDF -->
-<div id="pdfPages" class="hidden">
-  <!-- صفحة 1 -->
-  <div class="pdf-page" id="pdf1">
-    <h2>المؤثر العربي</h2>
-    <p style="color:#666;margin-bottom:30px">Media Kit 2026 | مصر</p>
-    <h3>التسعير</h3>
-    <div style="font-size:48px;color:#1a5d1a;font-weight:700" id="pdfPrice">$667</div>
-    <p style="margin-top:20px">السعر المقترح لريل 30 ثانية</p>
-    <p style="margin-top:40px;color:#999;font-size:12px" id="watermark">SA3ER.COM - النسخة المجانية</p>
+<div class="tabs-wrap">
+  <div class="card">
+    <div class="field">
+      <label>📱 المنصة الرئيسية</label>
+      <select id="platform">
+        <option value="">— اختر المنصة —</option>
+        <option value="instagram">انستجرام</option>
+        <option value="tiktok">تيك توك</option>
+        <option value="youtube">يوتيوب</option>
+        <option value="facebook">فيسبوك</option>
+        <option value="twitter">تويتر / X</option>
+      </select>
+    </div>
+    <div class="two-col">
+      <div class="field" style="margin:0">
+        <label>👥 عدد المتابعين</label>
+        <input type="number" id="followers" placeholder="مثال: 50000" min="0">
+      </div>
+      <div class="field" style="margin:0">
+        <label>💬 معدل التفاعل %</label>
+        <select id="engagement">
+          <option value="">— اختر —</option>
+          <option value="2">1٪ - 3٪</option>
+          <option value="4">3٪ - 6٪</option>
+          <option value="7">6٪ - 10٪</option>
+        </select>
+      </div>
+    </div>
   </div>
 
-  <!-- صفحة 2 -->
-  <div class="pdf-page" id="pdf2">
-    <h2>الباقات والأسعار</h2>
-    <div class="pdf-package"><span>ستوري 24 ساعة</span><strong id="packStory">$200</strong></div>
-    <div class="pdf-package"><span>بوست صور</span><strong id="packPost">$500</strong></div>
-    <div class="pdf-package"><span>ريل 30 ثانية</span><strong id="packReel">$667</strong></div>
-    <div class="pdf-package" style="border-color:#1a5d1a;background:#e8f5e8"><span>باكدج 3 بوستات</span><strong id="packBundle">$1,800</strong></div>
+  <div class="card">
+    <div class="chips" id="marketChips">
+      <button class="chip" data-v="egypt" onclick="selectChip(this,'market')">🇪🇬 مصر</button>
+      <button class="chip active" data-v="arab" onclick="selectChip(this,'market')">🌍 عربي عام</button>
+    </div>
   </div>
 
-  <!-- صفحة 3 -->
-  <div class="pdf-page" id="pdf3">
-    <h2>للتواصل</h2>
-    <p style="margin:20px 0">انستجرام: @your_username</p>
-    <p>واتساب: +20 XXXX XXXX</p>
-    <p style="margin-top:50px;color:#999;font-size:12px">© 2026 Sa3er - جميع الحقوق محفوظة</p>
+  <button class="btn-primary" onclick="calculate()"><i class="ti ti-calculator"></i> احسب سعري الآن</button>
+
+  <div class="result-box" id="resultBox">
+    <div class="result-header"><h3>💰 سعرك العادل للسبونسر</h3></div>
+    <div class="price-grid">
+      <div class="price-cell"><div class="price-lbl">الحد الأدنى</div><div class="price-num" id="priceMin">—</div><div class="price-cur">دولار</div></div>
+      <div class="price-cell"><div class="price-lbl">السعر المقترح</div><div class="price-num rec" id="priceRec">—</div><div class="price-cur">دولار</div></div>
+      <div class="price-cell"><div class="price-lbl">الحد الأقصى</div><div class="price-num" id="priceMax">—</div><div class="price-cur">دولار</div></div>
+    </div>
+  </div>
+
+  <button class="btn-secondary" id="btnMediaKit" onclick="showMediaKit()" style="display:none">
+    <i class="ti ti-id-badge"></i> اعمل ميديا كيت بالأرقام دي
+  </button>
+
+  <div class="mk-preview" id="mkPreview">
+    <div class="mk-header" id="mkToPrint">
+      <div class="mk-avatar">س</div>
+      <div class="mk-name">المؤثر العربي</div>
+      <div class="mk-bio" style="color:var(--teal-50);font-size:12px;">تفاعل: <span id="mkEng">0%</span> | السوق: <span id="mkMarket">عربي</span></div>
+      <div class="mk-stats">
+        <div class="mk-stat"><div class="mk-stat-val" id="mkFollowers">0</div><div class="mk-stat-lbl">متابع</div></div>
+        <div class="mk-stat"><div class="mk-stat-val" id="mkPrice">0$</div><div class="mk-stat-lbl">السعر</div></div>
+        <div class="mk-stat"><div class="mk-stat-val" id="mkMin">0$</div><div class="mk-stat-lbl">الحد الأدنى</div></div>
+      </div>
+    </div>
+    <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> PDF مجاني بعلامة مائية SA3ER.COM</button>
+    <button class="btn-cash" onclick="buyPDF()"><i class="ti ti-wallet"></i> اشتري النسخة النضيفة بـ 500 جنيه فودافون كاش</button>
+    <!-- الزرار المخفي للأدمن - هيظهر بس مع ?admin=sa3er -->
+    <button class="btn-admin" id="adminBtn" onclick="downloadPDF(true)">
+      🔑 توليد PDF نضيف - للأدمن فقط
+    </button>
   </div>
 </div>
 
 <script>
-const basePrice = 667;
-const minPrice = 467;
-const maxPrice = 1000;
-const followers = 333;
+let savedData = {};
 
-function showKit(){
-  document.getElementById('mediaKitSection').classList.remove('hidden');
-
-  // تحديث الأرقام
-  document.getElementById('minPrice').textContent = minPrice.toLocaleString();
-  document.getElementById('mainPrice').textContent = basePrice.toLocaleString();
-  document.getElementById('maxPrice').textContent = maxPrice.toLocaleString();
-
-  document.getElementById('statMin').textContent = minPrice + '$';
-  document.getElementById('statMain').textContent = basePrice + '$';
-  document.getElementById('statFollowers').textContent = followers.toLocaleString();
-
-  document.getElementById('pdfPrice').textContent = '$' + basePrice;
-  document.getElementById('packStory').textContent = '$' + Math.round(basePrice * 0.3);
-  document.getElementById('packPost').textContent = '$' + Math.round(basePrice * 0.75);
-  document.getElementById('packReel').textContent = '$' + basePrice;
-  document.getElementById('packBundle').textContent = '$' + Math.round(basePrice * 0.75 * 3 * 0.9);
+function calculate() {
+  const followers = parseInt(document.getElementById('followers').value) || 0;
+  const engagement = parseFloat(document.getElementById('engagement').value) || 0;
+  const platform = document.getElementById('platform').value;
+  const market = document.querySelector('#marketChips .chip.active')?.dataset.v || 'arab';
+  
+  if(!platform || followers <= 0 || !engagement) {
+    alert('املى كل البيانات المطلوبة');
+    return;
+  }
+  
+  let baseRate = market === 'egypt' ? 0.003 : 0.005;
+  const base = followers * baseRate * (engagement/3);
+  const min = Math.round(base * 0.7);
+  const rec = Math.round(base);
+  const max = Math.round(base * 1.5);
+  
+  document.getElementById('priceMin').textContent = min.toLocaleString();
+  document.getElementById('priceRec').textContent = rec.toLocaleString();
+  document.getElementById('priceMax').textContent = max.toLocaleString();
+  document.getElementById('resultBox').style.display = 'block';
+  
+  savedData = {followers, engagement, platform, market, price: rec, min};
+  document.getElementById('btnMediaKit').style.display = 'flex';
 }
 
-async function downloadPDF(isAdmin){
+function showMediaKit() {
+  document.getElementById('mkFollowers').textContent = savedData.followers.toLocaleString();
+  document.getElementById('mkPrice').textContent = savedData.price + '$';
+  document.getElementById('mkMin').textContent = savedData.min + '$';
+  document.getElementById('mkEng').textContent = savedData.engagement + '%';
+  document.getElementById('mkMarket').textContent = document.querySelector('#marketChips .chip.active').textContent.replace(/🇪🇬|🌍/g,'').trim();
+  document.getElementById('mkPreview').style.display = 'block';
+  
+  // اظهار زرار الأدمن بعد ما الميديا كيت يظهر
+  setTimeout(checkAdmin, 200);
+}
+
+function checkAdmin() {
+  if(window.location.href.includes('admin=sa3er')) {
+    document.getElementById('adminBtn').style.display = 'flex';
+  }
+}
+
+async function downloadPDF(isPaid) {
   const { jsPDF } = window.jspdf;
+  const element = document.getElementById('mkToPrint');
+  const canvas = await html2canvas(element, {scale: 2, backgroundColor: '#ffffff'});
   const pdf = new jsPDF('p', 'mm', 'a4');
-
-  if(!isAdmin){
-    document.getElementById('watermark').textContent = 'SA3ER.COM - النسخة المجانية';
-  } else {
-    document.getElementById('watermark').textContent = 'Generated by Sa3er - Admin Version';
+  const w = pdf.internal.pageSize.getWidth();
+  const h = (canvas.height * w) / canvas.width;
+  pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
+  
+  if(!isPaid) {
+    pdf.setFontSize(28);
+    pdf.setTextColor(200,200,200);
+    pdf.text('SA3ER.COM - نسخة مجانية', w/2, h/2, {angle: 45, align: 'center'});
   }
-
-  const pages = ['pdf1', 'pdf2', 'pdf3'];
-
-  for(let i=0; i<pages.length; i++){
-    const element = document.getElementById(pages[i]);
-    element.style.display = 'block';
-
-    const canvas = await html2canvas(element, {scale: 2, backgroundColor: '#ffffff'});
-    const imgData = canvas.toDataURL('image/png');
-
-    if(i > 0) pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-
-    element.style.display = 'none';
-  }
-
-  const filename = isAdmin? 'media-kit-pro.pdf' : 'media-kit-free.pdf';
-  pdf.save(filename);
-
-  if(isAdmin){
-    alert('تم! دي النسخة النضيفة. ابعتها للعميل بعد ما يحول 500 جنيه فودافون كاش');
-  }
+  pdf.save(isPaid ? 'MediaKit_Nadeef.pdf' : 'MediaKit_Free.pdf');
 }
 
-// عرض الكيت تلقائي أول ما الصفحة تفتح
-window.onload = showKit;
+function buyPDF() {
+  const cashNumber = '01062183539';
+  const whatsappNumber = '201282175854';
+  
+  const message = `السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ${cashNumber} عشان الميديا كيت النضيف.\n\nبياناتي:\n- المتابعين: ${savedData.followers.toLocaleString()}\n- التفاعل: ${savedData.engagement}%\n- السعر: ${savedData.price}$\n\nمرفق سكرين شوت التحويل 👇`;
+  
+  window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  alert('✅ 1. حول 500 جنيه على: ' + cashNumber + '\n2. خد سكرين\n3. ابعت على واتساب: 01282175854\n4. هرد عليك بالـ PDF النضيف');
+}
+
+function selectChip(el, group) {
+  document.querySelectorAll('#' + group + 'Chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// تشيك أول ما الصفحة تحمل
+window.addEventListener('load', checkAdmin);
 </script>
 </body>
 </html>
