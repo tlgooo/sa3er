@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سعّر | اكتشف سعر البراندات مستخبيه عليك</title>
+<title>سعّر | حاسبة تسعير المؤثرين العرب</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -28,7 +28,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .hero h1{font-size:clamp(28px,6vw,44px);font-weight:900;line-height:1.2;margin-bottom:14px;}
 .hero h1 em{color:var(--teal-600);font-style:normal;}
 .hero p{font-size:16px;color:var(--text-secondary);font-weight:600;}
-.social-proof{margin-top:16px;font-size:13px;color:var(--teal-600);font-weight:700}
 
 .tabs-wrap{max-width:720px;margin:0 auto;padding:0 16px;}
 .card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);padding:24px;margin-bottom:16px;position:relative;}
@@ -52,9 +51,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .btn-secondary{width:100%;padding:12px 20px;background:var(--white);color:var(--teal-600);border:1.5px solid var(--teal-600);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
 .btn-amber{width:100%;padding:13px 20px;background:var(--amber-600);color:var(--white);border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
 .btn-cash{width:100%;padding:15px 20px;background:#25D366;color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px;}
-.price-old{font-size:12px;color:#999;text-decoration:line-through;margin-bottom:5px}
-.urgency{margin-top:10px;padding:10px;background:#fff3cd;border-radius:8px;font-size:12px;color:#856404;text-align:center;font-weight:700}
-.guarantee{margin-top:12px;font-size:12px;color:var(--teal-600);text-align:center;font-weight:700}
 .btn-admin{width:100%;padding:15px 20px;background:#4CAF50;color:var(--white);border:3px dashed #fff;box-shadow:0 0 0 4px #4CAF50;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;display:none;align-items:center;justify-content:center;gap:9px;margin-top:12px;}
 .mk-preview{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
 .mk-header{background:var(--teal-900);padding:28px 24px;text-align:center;}
@@ -64,7 +60,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .mk-stat{background:var(--white);padding:16px 8px;text-align:center;}
 .mk-stat-val{font-size:20px;font-weight:900;color:var(--teal-600);font-family:'IBM Plex Mono',monospace;}
 .mk-stat-lbl{font-size:11px;color:var(--text-muted);margin-top:4px;font-weight:700;}
-
 .pdf-page{display:none;padding:0;background:#fff;color:#000;min-height:297mm;width:210mm}
 </style>
 </head>
@@ -75,9 +70,8 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 </nav>
 
 <div class="hero">
-  <h1>اكتشف <em>سعر البراندات</em><br>مستخبيه عليك</h1>
-  <p>أول حاسبة عربية معتمدة من 2000+ مؤثر. براند زي نايكي وببسي بيحسبوا بيها</p>
-  <div class="social-proof">⭐ موثوق من 2,347 مؤثر عربي | ⭐⭐ تقييم 4.9/5</div>
+  <h1>اعرف <em>سعرك الصح</em><br>من البراندات</h1>
+  <p>أداة تسعير احترافية للمؤثرين العرب - مش موجودة في أي مكان تاني</p>
 </div>
 
 <div class="tabs-wrap">
@@ -135,7 +129,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
   <div class="mk-preview" id="mkPreview">
     <div class="mk-header" id="mkToPrint">
       <div class="mk-avatar">س</div>
-      <div class="mk-name">اسمك هنا</div>
+      <div class="mk-name">المؤثر العربي</div>
       <div class="mk-bio" style="color:var(--teal-50);font-size:12px;">تفاعل: <span id="mkEng">0%</span> | السوق: <span id="mkMarket">عربي</span></div>
       <div class="mk-stats">
         <div class="mk-stat"><div class="mk-stat-val" id="mkFollowers">0</div><div class="mk-stat-lbl">متابع</div></div>
@@ -143,102 +137,94 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
         <div class="mk-stat"><div class="mk-stat-val" id="mkMin">0$</div><div class="mk-stat-lbl">الحد الأدنى</div></div>
       </div>
     </div>
-    <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> حمّل نسخة تجريبية - فيها العلامة المائية</button>
-
-    <div class="price-old">~~السعر العادي: 1200 جنيه~~</div>
-    <button class="btn-cash" onclick="buyPDF()"><i class="ti ti-wallet"></i> احصل على ملفك الاحترافي - يشرفك قدام أي براند 💎 500 جنيه فقط</button>
-
-    <div class="urgency">⚠️ عرض الإطلاق: 500 جنيه بدل 1200 جنيه - ينتهي بعد 48 ساعة</div>
-    <div class="guarantee">🔒 ضمان استرداد كامل خلال 24 ساعة لو الملف معجبكش</div>
-
-    <button class="btn-admin" id="adminBtn" onclick="downloadPDF(true)">🔑 توليد PDF نضيف - للأدمن فقط</button>
+    <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> PDF مجاني بعلامة مائية SA3ER.COM</button>
+    <button class="btn-cash" onclick="buyPDF()"><i class="ti ti-wallet"></i> اشتري النسخة النضيفة + الهدايا بـ 500 جنيه</button>
+    <button class="btn-admin" id="adminBtn" onclick="downloadPDF(true)">
+      🔑 توليد PDF نضيف + الهدايا - للأدمن فقط
+    </button>
   </div>
 </div>
 
+<!-- صفحات PDF المخفية -->
 <div id="pdfContainer">
+  <!-- صفحة 1: الميديا كيت الأساسي -->
   <div class="pdf-page" id="pdfPage1">
-    <div style="background:linear-gradient(135deg,#04342C 0%,#0F6E56 100%);color:#fff;padding:60px 40px;min-height:297mm">
-      <div style="text-align:center;margin-top:40px">
-        <div style="width:100px;height:100px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:48px;font-weight:900">س</div>
-        <h1 style="font-size:42px;font-weight:900;margin-bottom:10px">MEDIA KIT 2026</h1>
-        <p style="font-size:18px;opacity:0.9;margin-bottom:60px">اسمك هنا</p>
-      </div>
-      <div style="background:rgba(255,255,255,0.1);border-radius:20px;padding:40px;margin:0 20px">
-        <p style="font-size:14px;opacity:0.8;text-align:center;margin-bottom:15px">السعر المقترح لريل 30 ثانية</p>
-        <div style="font-size:72px;font-weight:900;text-align:center;font-family:'IBM Plex Mono',monospace" id="pdfMainPrice">$0</div>
-        <div style="display:flex;justify-content:space-around;margin-top:30px;text-align:center">
-          <div><div style="font-size:12px;opacity:0.7">الحد الأدنى</div><div style="font-size:20px;font-weight:700" id="pdfMinPrice">$0</div></div>
-          <div><div style="font-size:12px;opacity:0.7">الحد الأقصى</div><div style="font-size:20px;font-weight:700" id="pdfMaxPrice">$0</div></div>
+    <div id="pdfPrintArea">
+      <div class="mk-header" style="padding:50px 40px;min-height:150mm">
+        <div class="mk-avatar" style="width:100px;height:100px;font-size:48px">س</div>
+        <div class="mk-name" style="font-size:32px;margin-top:20px">المؤثر العربي</div>
+        <div class="mk-bio" style="color:var(--teal-50);font-size:16px;margin-top:10px">تفاعل: <span id="pdfEng">0%</span> | السوق: <span id="pdfMarket">عربي</span></div>
+        <div class="mk-stats" style="margin-top:40px">
+          <div class="mk-stat"><div class="mk-stat-val" style="font-size:28px" id="pdfFollowers">0</div><div class="mk-stat-lbl">متابع</div></div>
+          <div class="mk-stat"><div class="mk-stat-val" style="font-size:28px" id="pdfPrice">0$</div><div class="mk-stat-lbl">السعر المقترح</div></div>
+          <div class="mk-stat"><div class="mk-stat-val" style="font-size:28px" id="pdfMin">0$</div><div class="mk-stat-lbl">الحد الأدنى</div></div>
         </div>
       </div>
-      <div style="margin-top:80px;padding-top:30px;border-top:1px solid rgba(255,255,255,0.2)">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;text-align:center">
-          <div><div style="font-size:24px;font-weight:900" id="pdfFollowersStat">0</div><div style="font-size:12px;opacity:0.7">متابع</div></div>
-          <div><div style="font-size:24px;font-weight:900" id="pdfEngStat">0%</div><div style="font-size:12px;opacity:0.7">تفاعل</div></div>
-          <div><div style="font-size:24px;font-weight:900" id="pdfMarketStat">عربي</div><div style="font-size:12px;opacity:0.7">السوق</div></div>
-        </div>
+      <div style="padding:30px 40px;text-align:center">
+        <p style="font-size:11px;color:#999" id="pdfWatermark">SA3ER.COM</p>
       </div>
-      <p style="position:absolute;bottom:30px;left:0;right:0;text-align:center;font-size:11px;opacity:0.5" id="pdfWatermark1">SA3ER.COM</p>
     </div>
   </div>
 
+  <!-- صفحة 2: هدية - نصائح ذهبية للمدفوع فقط -->
   <div class="pdf-page" id="pdfPage2">
-    <div style="padding:50px 40px;background:#fff;min-height:297mm">
-      <h2 style="color:#04342C;font-size:32px;margin-bottom:10px">الجمهور والوصول</h2>
-      <p style="color:#666;margin-bottom:40px">أرقام حقيقية من حساباتي</p>
-      <div style="background:#E1F5EE;border-radius:15px;padding:30px;margin-bottom:30px">
-        <h3 style="color:#04342C;margin-bottom:20px">📊 التوزيع الديموغرافي</h3>
-        <div style="margin-bottom:15px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span>ذكور</span><span>65%</span></div>
-          <div style="height:8px;background:#c8ede0;border-radius:10px"><div style="height:8px;background:#0F6E56;width:65%;border-radius:10px"></div></div>
-        </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span>إناث</span><span>35%</span></div>
-          <div style="height:8px;background:#c8ede0;border-radius:10px"><div style="height:8px;background:#854F0B;width:35%;border-radius:10px"></div></div>
-        </div>
+    <div style="padding:50px 40px;background:linear-gradient(135deg,#fff 0%,#E1F5EE 100%);min-height:297mm">
+      <div style="background:#0F6E56;color:#fff;padding:8px 20px;border-radius:30px;display:inline-block;margin-bottom:25px;font-weight:700;font-size:14px">🎁 هدية مجانية مع ملفك الاحترافي</div>
+      <h2 style="color:#04342C;font-size:32px;margin-bottom:15px">نصائح ذهبية لزيادة دخلك من البراندات</h2>
+      <p style="color:#666;margin-bottom:30px">أسرار مجربة من 2000+ مؤثر عربي</p>
+
+      <div style="background:#fff;border-radius:15px;padding:25px;margin-bottom:15px;border-right:4px solid #0F6E56">
+        <h4 style="color:#04342C;margin-bottom:10px">1️⃣ قاعدة الـ 3 باقات</h4>
+        <p style="color:#555;font-size:14px;line-height:1.8">عمرك ما تبعت سعر واحد. ابعت 3 باقات: اقتصادي، احترافي، VIP. البراند دايماً هيختار الاحترافي عشان يحس انه كسبان.</p>
       </div>
-      <div style="background:#f8f9fa;border-radius:15px;padding:30px">
-        <h3 style="color:#04342C;margin-bottom:20px">🌍 الدول الأكثر تفاعلاً</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
-          <div style="padding:15px;background:#fff;border-radius:10px;text-align:center"><div style="font-size:20px;font-weight:700">45%</div><div style="font-size:12px;color:#666">مصر</div></div>
-          <div style="padding:15px;background:#fff;border-radius:10px;text-align:center"><div style="font-size:20px;font-weight:700">20%</div><div style="font-size:12px;color:#666">السعودية</div></div>
-          <div style="padding:15px;background:#fff;border-radius:10px;text-align:center"><div style="font-size:20px;font-weight:700">15%</div><div style="font-size:12px;color:#666">الإمارات</div></div>
-          <div style="padding:15px;background:#fff;border-radius:10px;text-align:center"><div style="font-size:20px;font-weight:700">20%</div><div style="font-size:12px;color:#666">باقي الدول</div></div>
-        </div>
+
+      <div style="background:#fff;border-radius:15px;padding:25px;margin-bottom:15px;border-right:4px solid #854F0B">
+        <h4 style="color:#04342C;margin-bottom:10px">2️⃣ توقيت الرد الذكي</h4>
+        <p style="color:#555;font-size:14px;line-height:1.8">لو البراند كلمك الصبح، رد العصر. الرد الفوري = انت فاضي. التأخير ساعتين = انت مشهور ومطلوب.</p>
+      </div>
+
+      <div style="background:#fff;border-radius:15px;padding:25px;margin-bottom:15px;border-right:4px solid #0F6E56">
+        <h4 style="color:#04342C;margin-bottom:10px">3️⃣ كلمة "يبدأ من"</h4>
+        <p style="color:#555;font-size:14px;line-height:1.8">قول "سعري يبدأ من 500$" بدل "سعري 500$". الكلمة دي بتفتح باب التفاوض وبتخلي البراند يحس انه يقدر ياخد خصم.</p>
+      </div>
+
+      <div style="background:#fff;border-radius:15px;padding:25px;border-right:4px solid #854F0B">
+        <h4 style="color:#04342C;margin-bottom:10px">4️⃣ تقرير الأداء بعد 24 ساعة</h4>
+        <p style="color:#555;font-size:14px;line-height:1.8">ابعت للبراند سكرين شوت من الـ insights بعد يوم. الحركة دي هتخليه يرجعلك تاني وثالث من غير ما تطلب.</p>
       </div>
     </div>
   </div>
 
+  <!-- صفحة 3: هدية - أسرار البراندات للمدفوع فقط -->
   <div class="pdf-page" id="pdfPage3">
-    <div style="padding:50px 40px;background:#fff;min-height:297mm">
-      <h2 style="color:#04342C;font-size:32px;margin-bottom:10px">الباقات والأسعار</h2>
-      <p style="color:#666;margin-bottom:40px">اختر ما يناسب حملتك</p>
-      <div style="background:linear-gradient(135deg,#f8f9fa 0%,#fff 100%);border:2px solid #e0e0e0;border-radius:15px;padding:25px;margin-bottom:15px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><h4 style="font-size:18px;color:#04342C;margin-bottom:5px">ستوري 24 ساعة</h4><p style="font-size:13px;color:#666">ظهور مؤقت + سكرين شوت للتقرير</p></div>
-          <div style="font-size:28px;font-weight:900;color:#0F6E56;font-family:'IBM Plex Mono',monospace" id="pdfStoryPrice">$0</div>
-        </div>
+    <div style="padding:50px 40px;background:linear-gradient(135deg,#04342C 0%,#0F6E56 100%);color:#fff;min-height:297mm">
+      <div style="background:rgba(255,255,255,0.15);color:#fff;padding:8px 20px;border-radius:30px;display:inline-block;margin-bottom:25px;font-weight:700;font-size:14px">🔥 أسرار خاصة</div>
+      <h2 style="font-size:32px;margin-bottom:15px">5 أسرار البراندات مش عايزك تعرفها</h2>
+      <p style="opacity:0.8;margin-bottom:30px">اعرفها عشان تطلب السعر اللي تستحقه</p>
+
+      <div style="background:rgba(255,255,255,0.1);border-radius:15px;padding:20px;margin-bottom:15px">
+        <h4 style="margin-bottom:8px">1. الميزانية بتتحجز قبل 6 شهور</h4>
+        <p style="font-size:13px;opacity:0.9">لو كلمتهم في 11 عشان حملة رمضان = اتأخرت. كلمهم في 8-9 عشان تاخد من ميزانية السنة الجديدة.</p>
       </div>
-      <div style="background:linear-gradient(135deg,#f8f9fa 0%,#fff 100%);border:2px solid #e0e0e0;border-radius:15px;padding:25px;margin-bottom:15px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><h4 style="font-size:18px;color:#04342C;margin-bottom:5px">بوست صور ثابت</h4><p style="font-size:13px;color:#666">بوست دائم + حفظ في الهايلايتس</p></div>
-          <div style="font-size:28px;font-weight:900;color:#0F6E56;font-family:'IBM Plex Mono',monospace" id="pdfPostPrice">$0</div>
-        </div>
+
+      <div style="background:rgba(255,255,255,0.1);border-radius:15px;padding:20px;margin-bottom:15px">
+        <h4 style="margin-bottom:8px">2. التفاعل = فلوس أكتر من المتابعين</h4>
+        <p style="font-size:13px;opacity:0.9">براند هيدفع 800$ لمؤثر 30 ألف بتفاعل 7% ومش هيدفع 300$ لمؤثر 200 ألف بتفاعل 1%. ركز على التفاعل.</p>
       </div>
-      <div style="background:linear-gradient(135deg,#E1F5EE 0%,#fff 100%);border:3px solid #0F6E56;border-radius:15px;padding:25px;margin-bottom:30px">
-        <div style="background:#0F6E56;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:10px">الأكثر طلباً ⭐</div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><h4 style="font-size:18px;color:#04342C;margin-bottom:5px">ريل 30 ثانية</h4><p style="font-size:13px;color:#666">فيديو احترافي + حفظ في الريلز</p></div>
-          <div style="font-size:32px;font-weight:900;color:#0F6E56;font-family:'IBM Plex Mono',monospace" id="pdfReelPrice">$0</div>
-        </div>
+
+      <div style="background:rgba(255,255,255,0.1);border-radius:15px;padding:20px;margin-bottom:15px">
+        <h4 style="margin-bottom:8px">3. الميديا كيت = 30% زيادة سعر</h4>
+        <p style="font-size:13px;opacity:0.9">نفس المؤثر بنفس الأرقام. اللي معاه PDF محترف بياخد 30% زيادة عشان البراند بيطمن انه محترف.</p>
       </div>
-      <div style="background:#04342C;color:#fff;border-radius:15px;padding:30px;text-align:center;margin-top:40px">
-        <h3 style="margin-bottom:20px">للتواصل والتعاون</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px">
-          <div><div style="font-size:12px;opacity:0.7;margin-bottom:5px">انستجرام</div><div style="font-weight:700">@your_username</div></div>
-          <div><div style="font-size:12px;opacity:0.7;margin-bottom:5px">واتساب</div><div style="font-weight:700">+20 XXX</div></div>
-          <div><div style="font-size:12px;opacity:0.7;margin-bottom:5px">الإيميل</div><div style="font-weight:700">your@email</div></div>
-        </div>
+
+      <div style="background:rgba(255,255,255,0.1);border-radius:15px;padding:20px;margin-bottom:15px">
+        <h4 style="margin-bottom:8px">4. شهر 11 و 12 سعر مضاعف</h4>
+        <p style="font-size:13px;opacity:0.9">البراندات لازم تصرف باقي ميزانية السنة في آخر شهرين. اطلب 1.5x سعرك العادي في الفترة دي.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.1);border-radius:15px;padding:20px">
+        <h4 style="margin-bottom:8px">5. كلمة "حصري" = فلوس إضافية</h4>
+        <p style="font-size:13px;opacity:0.9">لو طلب منك متشتغلش مع منافسه لمدة شهر، اطلب +50% على السعر. دي اسمها "فترة حصرية" وليها سعر.</p>
       </div>
     </div>
   </div>
@@ -294,20 +280,20 @@ async function downloadPDF(isPaid) {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'mm', 'a4');
 
-  document.getElementById('pdfMainPrice').textContent = '$' + savedData.price;
-  document.getElementById('pdfMinPrice').textContent = '$' + savedData.min;
-  document.getElementById('pdfMaxPrice').textContent = '$' + savedData.max;
-  document.getElementById('pdfStoryPrice').textContent = '$' + Math.round(savedData.price * 0.3);
-  document.getElementById('pdfPostPrice').textContent = '$' + Math.round(savedData.price * 0.75);
-  document.getElementById('pdfReelPrice').textContent = '$' + savedData.price;
-  document.getElementById('pdfFollowersStat').textContent = savedData.followers.toLocaleString();
-  document.getElementById('pdfEngStat').textContent = savedData.engagement + '%';
-  document.getElementById('pdfMarketStat').textContent = document.querySelector('#marketChips.chip.active').textContent.replace(/🇪🇬|🌍/g,'').trim();
+  // تحديث بيانات صفحة الميديا كيت
+  document.getElementById('pdfFollowers').textContent = savedData.followers.toLocaleString();
+  document.getElementById('pdfPrice').textContent = savedData.price + '$';
+  document.getElementById('pdfMin').textContent = savedData.min + '$';
+  document.getElementById('pdfEng').textContent = savedData.engagement + '%';
+  document.getElementById('pdfMarket').textContent = document.querySelector('#marketChips.chip.active').textContent.replace(/🇪🇬|🌍/g,'').trim();
+  document.getElementById('pdfWatermark').textContent = isPaid? 'Generated by Sa3er - Admin' : 'SA3ER.COM - نسخة مجانية';
 
-  const watermark = isPaid? 'Generated by Sa3er - Admin Version' : 'SA3ER.COM';
-  document.getElementById('pdfWatermark1').textContent = watermark;
+  let pages = ['pdfPage1'];
 
-  const pages = ['pdfPage1', 'pdfPage2', 'pdfPage3'];
+  // لو مدفوع ضيف صفحات الهدايا
+  if(isPaid) {
+    pages.push('pdfPage2', 'pdfPage3');
+  }
 
   for(let i = 0; i < pages.length; i++) {
     const element = document.getElementById(pages[i]);
@@ -328,7 +314,7 @@ async function downloadPDF(isPaid) {
     element.style.display = 'none';
   }
 
-  const filename = isPaid? 'MediaKit_Professional.pdf' : 'MediaKit_Free.pdf';
+  const filename = isPaid? 'MediaKit_Professional+Secrets.pdf' : 'MediaKit_Free.pdf';
   pdf.save(filename);
 }
 
@@ -336,10 +322,10 @@ function buyPDF() {
   const cashNumber = '01062183539';
   const whatsappNumber = '201282175854';
 
-  const message = `السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ${cashNumber} عشان الميديا كيت النضيف.\n\nبياناتي:\n- المنصة: ${savedData.platform}\n- المتابعين: ${savedData.followers.toLocaleString()}\n- التفاعل: ${savedData.engagement}%\n- السعر المقترح: ${savedData.price}$\n\nمرفق سكرين شوت التحويل 👇`;
+  const message = `السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ${cashNumber} عشان الميديا كيت النضيف + الهدايا.\n\nبياناتي:\n- المنصة: ${savedData.platform}\n- المتابعين: ${savedData.followers.toLocaleString()}\n- التفاعل: ${savedData.engagement}%\n- السعر: ${savedData.price}$\n\nمرفق سكرين شوت التحويل 👇`;
 
   window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
-  alert('✅ خطوات الشراء:\n1. حول 500 جنيه على: ' + cashNumber + '\n2. خد سكرين\n3. ابعت على واتساب: 01282175854\n4. هرد عليك بالـ PDF النضيف فوراً');
+  alert('✅ 1. حول 500 جنيه على: ' + cashNumber + '\n2. خد سكرين\n3. ابعت على واتساب: 01282175854\n4. هرد عليك بالـ PDF النضيف + صفحتين أسرار وهدايا');
 }
 
 function selectChip(el, group) {
