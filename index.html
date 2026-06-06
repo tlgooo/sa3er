@@ -15,8 +15,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root {
   --teal-50:#E1F5EE;--teal-600:#0F6E56;--teal-800:#085041;--teal-900:#04342C;
-  --amber-600:#854F0B;--green-admin:#4CAF50;
-  --bg:#f5fdf9;--white:#ffffff;--text-primary:#0d2b1f;--text-secondary:#3d6b58;--text-muted:#6b9e87;
+  --amber-600:#854F0B;--bg:#f5fdf9;--white:#ffffff;--text-primary:#0d2b1f;--text-secondary:#3d6b58;--text-muted:#6b9e87;
   --border:#c8ede0;--border-light:#e2f5ec;
   --radius-lg:18px;
 }
@@ -52,7 +51,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .btn-secondary{width:100%;padding:12px 20px;background:var(--white);color:var(--teal-600);border:1.5px solid var(--teal-600);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
 .btn-amber{width:100%;padding:13px 20px;background:var(--amber-600);color:var(--white);border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
 .btn-cash{width:100%;padding:15px 20px;background:#25D366;color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px;}
-.btn-admin{width:100%;padding:13px 20px;background:var(--green-admin);color:var(--white);border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.btn-admin{width:100%;padding:15px 20px;background:#4CAF50;color:var(--white);border:3px dashed #fff;box-shadow:0 0 0 4px #4CAF50;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;display:none;align-items:center;justify-content:center;gap:9px;margin-top:12px;}
 .mk-preview{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
 .mk-header{background:var(--teal-900);padding:28px 24px;text-align:center;}
 .mk-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;font-weight:900;color:var(--white);}
@@ -139,9 +138,9 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
     </div>
     <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> PDF مجاني بعلامة مائية SA3ER.COM</button>
     <button class="btn-cash" onclick="buyPDF()"><i class="ti ti-wallet"></i> اشتري النسخة النضيفة بـ 500 جنيه فودافون كاش</button>
-    <!-- الزرار المخفي للأدمن -->
+    <!-- الزرار المخفي للأدمن - هيظهر بس مع ?admin=sa3er -->
     <button class="btn-admin" id="adminBtn" onclick="downloadPDF(true)">
-      <i class="ti ti-key"></i> توليد PDF نضيف - للأدمن فقط
+      🔑 توليد PDF نضيف - للأدمن فقط
     </button>
   </div>
 </div>
@@ -182,6 +181,15 @@ function showMediaKit() {
   document.getElementById('mkEng').textContent = savedData.engagement + '%';
   document.getElementById('mkMarket').textContent = document.querySelector('#marketChips .chip.active').textContent.replace(/🇪🇬|🌍/g,'').trim();
   document.getElementById('mkPreview').style.display = 'block';
+  
+  // اظهار زرار الأدمن بعد ما الميديا كيت يظهر
+  setTimeout(checkAdmin, 200);
+}
+
+function checkAdmin() {
+  if(window.location.href.includes('admin=sa3er')) {
+    document.getElementById('adminBtn').style.display = 'flex';
+  }
 }
 
 async function downloadPDF(isPaid) {
@@ -216,12 +224,8 @@ function selectChip(el, group) {
   el.classList.add('active');
 }
 
-// الزرار المخفي - يظهر بس لو الرابط فيه ?admin=sa3er
-if(window.location.search.includes('admin=sa3er')) {
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('adminBtn').style.display = 'flex';
-  });
-}
+// تشيك أول ما الصفحة تحمل
+window.addEventListener('load', checkAdmin);
 </script>
 </body>
 </html>
