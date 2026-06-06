@@ -16,15 +16,21 @@
 :root {
   --teal-50:#E1F5EE;--teal-600:#0F6E56;--teal-800:#085041;--teal-900:#04342C;
   --amber-600:#854F0B;
-  --bg:#f5fdf9;--white:#ffffff;--text-primary:#0d2b1f;--text-muted:#6b9e87;
+  --bg:#f5fdf9;--white:#ffffff;--text-primary:#0d2b1f;--text-secondary:#3d6b58;
   --border:#c8ede0;--border-light:#e2f5ec;
-  --shadow-md:0 4px 20px rgba(13,110,86,0.12);
   --radius-lg:18px;
 }
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text-primary);direction:rtl;padding-bottom:80px;}
 nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .nav-logo{font-size:22px;font-weight:900;color:var(--teal-800);}
 .nav-logo span{color:var(--amber-600);}
+
+/* الهيرو + النبزة اللي طلبتها */
+.hero{text-align:center;padding:56px 20px 40px;max-width:640px;margin:0 auto;}
+.hero h1{font-size:clamp(28px,6vw,44px);font-weight:900;line-height:1.2;margin-bottom:14px;}
+.hero h1 em{color:var(--teal-600);font-style:normal;}
+.hero p{font-size:16px;color:var(--text-secondary);font-weight:600;}
+
 .tabs-wrap{max-width:720px;margin:0 auto;padding:0 16px;}
 .tabs{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);margin:28px 0 20px;}
 .tab-btn{padding:16px 12px;font-size:14px;font-weight:700;background:none;border:none;cursor:pointer;color:var(--text-muted);border-bottom:3px solid transparent;}
@@ -63,6 +69,12 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 <nav>
   <div class="nav-logo">سعّ<span>ر</span></div>
 </nav>
+
+<!-- النبزة التعريفية فوق زي ما طلبت -->
+<div class="hero">
+  <h1>اعرف <em>سعرك الصح</em><br>من البراندات</h1>
+  <p>أداة تسعير احترافية للمؤثرين العرب - مش موجودة في أي مكان تاني</p>
+</div>
 
 <div class="tabs-wrap">
   <div class="panel active" id="panel-calc">
@@ -189,14 +201,15 @@ async function downloadPDF(isPaid) {
   pdf.save(isPaid ? 'MediaKit_Nadeef.pdf' : 'MediaKit_Free.pdf');
 }
 
+// ظبطت رقم الواتساب منفصل عن الكاش
 function buyPDF() {
-  const cashNumber = '01062183539'; // فودافون كاش
-  const whatsappNumber = '201282175854'; // واتساب بصيغة دولية
+  const cashNumber = '01062183539'; // للتحويل فقط
+  const whatsappNumber = '201282175854'; // للتواصل - بصيغة دولية
   
   const message = `السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ${cashNumber} عشان الميديا كيت النضيف.\n\nبياناتي:\n- المتابعين: ${savedData.followers.toLocaleString()}\n- التفاعل: ${savedData.engagement}%\n- السعر: ${savedData.price}$\n\nمرفق سكرين شوت التحويل 👇`;
   
   window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
-  alert('✅ 1. حول 500 جنيه على: ' + cashNumber + '\n2. خد سكرين\n3. ابعت على واتساب\n4. هرد عليك بالـ PDF النضيف');
+  alert('✅ 1. حول 500 جنيه على: ' + cashNumber + '\n2. خد سكرين\n3. ابعت على واتساب: 01282175854\n4. هرد عليك بالـ PDF النضيف');
 }
 
 function selectChip(el, group) {
