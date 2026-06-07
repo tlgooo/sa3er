@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سعّر | حاسبة تسعير المؤثرين العرب</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style> 
@@ -33,7 +31,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .field select,.field input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:12px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.chip{padding:8px 15px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-muted);transition:all .2s;}
+.chip{padding:8px 15px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-muted);transition:all .2s;user-select:none;}
 .chip.active{background:var(--teal-600);border-color:var(--teal-600);color:var(--white);}
 .btn-primary{width:100%;padding:15px 20px;background:var(--teal-600);color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .2s;}
 .btn-primary:hover{opacity:.9;}
@@ -144,14 +142,15 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
     </div>
   </div>
  
+  <!-- FIX 1: إزالة onclick من الـ HTML وإضافة id لكل chip -->
   <div class="card">
     <div class="chips" id="marketChips">
-      <button class="chip" data-v="egypt" onclick="selectChip(this,'market')">🇪🇬 مصر</button>
-      <button class="chip active" data-v="arab" onclick="selectChip(this,'market')">🌍 عربي عام</button>
+      <button class="chip" id="chip-egypt" data-v="egypt">🇪🇬 مصر</button>
+      <button class="chip active" id="chip-arab" data-v="arab">🌍 عربي عام</button>
     </div>
   </div>
  
-  <button class="btn-primary" onclick="calculate()"><i class="ti ti-calculator"></i> احسب سعري الآن</button>
+  <button class="btn-primary" id="calcBtn"><i class="ti ti-calculator"></i> احسب سعري الآن</button>
  
   <div class="result-teaser" id="resultTeaser">
  
@@ -267,10 +266,10 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
         <div class="lc-item">🔒 4 باقات أسعار</div>
         <div class="lc-item">🔒 نصايح المنصة</div>
       </div>
-      <button class="btn-cash" onclick="buyPDF()"><i class="ti ti-wallet"></i> افتح التقرير الكامل — 500 جنيه فقط</button>
+      <button class="btn-cash" id="buyBtn1"><i class="ti ti-wallet"></i> افتح التقرير الكامل — 500 جنيه فقط</button>
     </div>
  
-    <button class="btn-secondary" id="btnMediaKit" onclick="showMediaKit()" style="display:flex">
+    <button class="btn-secondary" id="btnMediaKit">
       <i class="ti ti-id-badge"></i> اعمل ميديا كيت PDF بعلامة مائية (مجاني)
     </button>
  
@@ -288,9 +287,9 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
         <div class="mk-stat"><div class="mk-stat-val" id="mkMin">0$</div><div class="mk-stat-lbl">الحد الأدنى</div></div>
       </div>
     </div>
-    <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> PDF مجاني بعلامة مائية SA3ER.COM</button>
-    <button class="btn-cash" onclick="buyPDF()" style="border-radius:0 0 0 0;"><i class="ti ti-wallet"></i> اشتري النسخة النضيفة بـ 500 جنيه</button>
-    <button class="btn-admin" id="adminBtn" onclick="generateFullReport()">🔑 توليد التقرير الكامل بـ AI - للأدمن فقط</button>
+    <button class="btn-amber" id="btnDownloadFree"><i class="ti ti-download"></i> PDF مجاني بعلامة مائية SA3ER.COM</button>
+    <button class="btn-cash" id="buyBtn2" style="border-radius:0;"><i class="ti ti-wallet"></i> اشتري النسخة النضيفة بـ 500 جنيه</button>
+    <button class="btn-admin" id="adminBtn">🔑 توليد التقرير الكامل بـ AI - للأدمن فقط</button>
   </div>
  
   <!-- تقرير كامل للأدمن -->
@@ -333,7 +332,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
           </div>
           <div id="aiPlatformTips" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--border-light);border-radius:12px;padding:14px;white-space:pre-line;"></div>
         </div>
-        <button class="btn-primary" id="btnDownloadPDF" onclick="downloadFullReportPDF()">
+        <button class="btn-primary" id="btnDownloadPDF">
           <i class="ti ti-download"></i> حمّل PDF كامل وابعته للعميل
         </button>
       </div>
@@ -343,34 +342,44 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 </div>
  
 <script> 
-// *** البيانات المحفوظة ***
-let savedData = {};
-let aiReportData = {};
+// ===== البيانات المحفوظة =====
+var savedData = {};
+var aiReportData = {};
  
-// *** مفتاح API — ضعه هنا ***
-const API_KEY = ' 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';
+// *** مفتاح API ***
+var API_KEY = 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
  
-const platformNames = {instagram:'انستجرام',tiktok:'تيك توك',youtube:'يوتيوب',facebook:'فيسبوك',twitter:'تويتر / X'};
-const platformIcons = {instagram:'📸',tiktok:'🎵',youtube:'▶️',facebook:'👤',twitter:'🐦'};
+var platformNames = {instagram:'انستجرام',tiktok:'تيك توك',youtube:'يوتيوب',facebook:'فيسبوك',twitter:'تويتر / X'};
+var platformIcons = {instagram:'📸',tiktok:'🎵',youtube:'▶️',facebook:'👤',twitter:'🐦'};
  
-// ========== FIX 1: selectChip — يحفظ الاختيار صح ==========
-function selectChip(el, group) {
-  // ازل active من كل الـ chips في نفس الـ group
-  var container = document.getElementById(group + 'Chips');
-  if (!container) return;
-  container.querySelectorAll('.chip').forEach(function(c) {
+// ===== FIX 1: معالجة الـ chips بـ event delegation =====
+document.getElementById('marketChips').addEventListener('click', function(e) {
+  var chip = e.target.closest('.chip');
+  if (!chip) return;
+  // إزالة active من الكل
+  document.querySelectorAll('#marketChips .chip').forEach(function(c) {
     c.classList.remove('active');
   });
-  el.classList.add('active');
-}
+  // إضافة active للـ chip المضغوط
+  chip.classList.add('active');
+});
  
-// ========== FIX 2: calculate — يقرأ اختيار السوق صح ==========
+// ===== FIX 2: ربط الأزرار بالدوال بدل onclick inline =====
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('btnMediaKit').addEventListener('click', showMediaKit);
+document.getElementById('buyBtn1').addEventListener('click', buyPDF);
+document.getElementById('buyBtn2').addEventListener('click', buyPDF);
+document.getElementById('btnDownloadFree').addEventListener('click', function() { downloadPDF(false); });
+document.getElementById('adminBtn').addEventListener('click', generateFullReport);
+document.getElementById('btnDownloadPDF').addEventListener('click', downloadFullReportPDF);
+ 
+// ===== دالة حساب السعر =====
 function calculate() {
   var followers = parseInt(document.getElementById('followers').value) || 0;
   var engagement = parseFloat(document.getElementById('engagement').value) || 0;
   var platform = document.getElementById('platform').value;
  
-  // قراءة السوق من الـ chip النشط — بنقرأ data-v مباشرة
+  // قراءة السوق من الـ chip النشط
   var activeChip = document.querySelector('#marketChips .chip.active');
   var market = activeChip ? activeChip.getAttribute('data-v') : 'arab';
  
@@ -393,7 +402,7 @@ function calculate() {
   var score = Math.round(engScore + follScore + mktScore);
   var rankPct = Math.max(5, Math.round(100 - score));
  
-  // *** حفظ كل البيانات في savedData بشكل صحيح ***
+  // حفظ كل البيانات
   savedData = {
     followers: followers,
     engagement: engagement,
@@ -451,13 +460,12 @@ function showMediaKit() {
   document.getElementById('mkMin').textContent = d.min.toLocaleString('ar-EG') + '$';
   document.getElementById('mkEng').textContent = d.engagement + '%';
  
-  var activeChip = document.querySelector('#marketChips .chip.active');
-  var mktText = activeChip ? activeChip.textContent.replace(/🇪🇬|🌍/g, '').trim() : 'عربي عام';
+  var mktText = (d.market === 'egypt') ? 'مصر' : 'عربي عام';
   document.getElementById('mkMarket').textContent = mktText;
  
   document.getElementById('mkPreview').style.display = 'block';
   document.getElementById('mkPreview').scrollIntoView({ behavior: 'smooth' });
-  setTimeout(checkAdmin, 200);
+  checkAdmin();
 }
  
 function checkAdmin() {
@@ -469,6 +477,14 @@ function checkAdmin() {
 async function downloadPDF(isPaid) {
   var d = savedData;
   if (!d.followers) { alert('احسب السعر الأول'); return; }
+ 
+  // تحميل المكتبات ديناميكيًا
+  if (!window.jspdf) {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  }
+  if (!window.html2canvas) {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  }
  
   try {
     var { jsPDF } = window.jspdf;
@@ -488,6 +504,16 @@ async function downloadPDF(isPaid) {
     alert('حصل خطأ في تحميل PDF — جرب تاني');
     console.error(e);
   }
+}
+ 
+function loadScript(src) {
+  return new Promise(function(resolve, reject) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
 }
  
 async function generateFullReport() {
@@ -564,7 +590,7 @@ async function generateFullReport() {
   }
 }
  
-// ========== FIX 3: downloadFullReportPDF — بيبعت البيانات للنافذة الجديدة صح ==========
+// ===== FIX 3: الطباعة — بدل فتح نافذة جديدة، نحفظ البيانات في localStorage ونفتح صفحة مستقلة =====
 function downloadFullReportPDF() {
   if (!aiReportData.tips && !aiReportData.message && !aiReportData.packages) {
     alert('⚠️ التقرير لسه بيتولد — استنى ثواني وجرب تاني');
@@ -575,18 +601,21 @@ function downloadFullReportPDF() {
   var platName = platformNames[d.platform] || d.platform || '—';
   var mktLabel = (d.market === 'egypt') ? 'مصر' : 'عربي عام';
  
-  // دالة تأمين HTML
   function safe(str) {
-    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return (str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
  
-  // *** الإصلاح الرئيسي: بنحول البيانات لـ JSON ونحطها في الصفحة مباشرة ***
-  var html = '<!DOCTYPE html><html lang="ar" dir="rtl">' +
-    '<head><meta charset="UTF-8">' +
+  // ===== نبني الـ HTML كاملًا مع البيانات مدمجة فيه مباشرة =====
+  var html = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">' +
+    '<title>سعّر - التقرير الكامل</title>' +
     '<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">' +
     '<style>' +
     '*{margin:0;padding:0;box-sizing:border-box;}' +
-    'body{font-family:Cairo,sans-serif;background:#fff;color:#0d2b1f;direction:rtl;}' +
+    'body{font-family:Cairo,sans-serif;background:#fff;color:#0d2b1f;direction:rtl;max-width:800px;margin:0 auto;}' +
     '.header{background:#04342C;color:white;padding:30px 40px;text-align:center;}' +
     '.header h1{font-size:28px;font-weight:900;margin-bottom:4px;}' +
     '.header p{font-size:13px;color:#9FE1CB;}' +
@@ -602,53 +631,44 @@ function downloadFullReportPDF() {
     '.section-body{font-size:13px;line-height:2;color:#0d2b1f;white-space:pre-wrap;background:#f5fdf9;border-radius:10px;padding:16px;}' +
     '.msg-body{border-right:4px solid #0F6E56;background:#E1F5EE;}' +
     '.print-btn{margin:20px 40px;padding:14px 24px;background:#0F6E56;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;width:calc(100% - 80px);}' +
-    '.footer{background:#04342C;color:#5DCAA5;text-align:center;padding:16px;font-size:11px;}' +
+    '.footer{background:#04342C;color:#5DCAA5;text-align:center;padding:16px;font-size:11px;margin-top:10px;}' +
     '@media print{.print-btn{display:none;}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}' +
     '</style></head><body>' +
- 
     '<div class="header">' +
     '<h1>سعّر — التقرير الكامل</h1>' +
     '<p>تقرير تسعير احترافي للمؤثرين العرب</p>' +
-    '<div class="meta">' + safe(platName) + ' · ' + (d.followers || 0).toLocaleString('ar-EG') + ' متابع · ' + (d.engagement || 0) + '% تفاعل · ' + safe(mktLabel) + '</div>' +
+    '<div class="meta">' + safe(platName) + ' · ' + Number(d.followers||0).toLocaleString('ar-EG') + ' متابع · ' + (d.engagement||0) + '% تفاعل · ' + safe(mktLabel) + '</div>' +
     '</div>' +
- 
     '<div class="prices">' +
-    '<div class="price-cell"><div class="price-lbl">الحد الأدنى</div><div class="price-num">$' + (d.min || 0).toLocaleString('ar-EG') + '</div></div>' +
-    '<div class="price-cell"><div class="price-rec-lbl">✓ السعر الصح</div><div class="price-num rec">$' + (d.price || 0).toLocaleString('ar-EG') + '</div></div>' +
-    '<div class="price-cell"><div class="price-lbl">الحد الأقصى</div><div class="price-num">$' + (d.max || 0).toLocaleString('ar-EG') + '</div></div>' +
+    '<div class="price-cell"><div class="price-lbl">الحد الأدنى</div><div class="price-num">$' + Number(d.min||0).toLocaleString('ar-EG') + '</div></div>' +
+    '<div class="price-cell"><div class="price-rec-lbl">✓ السعر الصح</div><div class="price-num rec">$' + Number(d.price||0).toLocaleString('ar-EG') + '</div></div>' +
+    '<div class="price-cell"><div class="price-lbl">الحد الأقصى</div><div class="price-num">$' + Number(d.max||0).toLocaleString('ar-EG') + '</div></div>' +
     '</div>' +
- 
-    '<div class="section"><div class="section-title">💡 نصايح التفاوض</div>' +
-    '<div class="section-body">' + safe(aiReportData.tips) + '</div></div>' +
- 
-    '<div class="section"><div class="section-title">💬 الرسالة الجاهزة للبراند</div>' +
-    '<div class="section-body msg-body">' + safe(aiReportData.message) + '</div></div>' +
- 
-    '<div class="section"><div class="section-title">📦 الباقات والأسعار</div>' +
-    '<div class="section-body">' + safe(aiReportData.packages) + '</div></div>' +
- 
-    '<div class="section"><div class="section-title">⭐ نصايح خاصة بـ' + safe(platName) + '</div>' +
-    '<div class="section-body">' + safe(aiReportData.platformTips) + '</div></div>' +
- 
+    '<div class="section"><div class="section-title">💡 نصايح التفاوض</div><div class="section-body">' + safe(aiReportData.tips) + '</div></div>' +
+    '<div class="section"><div class="section-title">💬 الرسالة الجاهزة للبراند</div><div class="section-body msg-body">' + safe(aiReportData.message) + '</div></div>' +
+    '<div class="section"><div class="section-title">📦 الباقات والأسعار</div><div class="section-body">' + safe(aiReportData.packages) + '</div></div>' +
+    '<div class="section"><div class="section-title">⭐ نصايح خاصة بـ' + safe(platName) + '</div><div class="section-body">' + safe(aiReportData.platformTips) + '</div></div>' +
     '<button class="print-btn" onclick="window.print()">🖨️ اطبع / احفظ كـ PDF</button>' +
     '<div class="footer">SA3ER.COM — أداة تسعير احترافية للمؤثرين العرب</div>' +
     '</body></html>';
  
-  // *** استخدام Blob بدل window.open مع document.write — أضمن بكتير ***
+  // استخدام Blob URL — يضمن وصول البيانات للنافذة الجديدة
   var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   var url = URL.createObjectURL(blob);
   var win = window.open(url, '_blank');
  
   if (!win) {
-    // لو المتصفح بلوك الـ popup، حمّله مباشرة
+    // لو المتصفح بلوك الـ popup، نحمّله كملف
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'sa3er_report.html';
+    a.download = 'sa3er_full_report.html';
+    document.body.appendChild(a);
     a.click();
-    alert('تم تحميل التقرير كملف HTML — افتحه في المتصفح وعمل Print > Save as PDF');
+    document.body.removeChild(a);
+    alert('تم تحميل التقرير كملف HTML — افتحه في المتصفح ثم اعمل Print وحدد Save as PDF');
   }
  
-  // تنظيف الـ URL بعد فتره
+  // تنظيف الـ Blob URL بعد دقيقة
   setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
 }
  
@@ -658,7 +678,7 @@ function buyPDF() {
   var d = savedData;
   var mkt = (d.market === 'egypt') ? 'مصر' : 'عربي عام';
   var platName = platformNames[d.platform] || d.platform || '—';
-  var message = 'السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ' + cashNumber + ' عشان التقرير الكامل.\n\nبياناتي:\n- المنصة: ' + platName + '\n- المتابعين: ' + (d.followers || 0).toLocaleString() + '\n- التفاعل: ' + (d.engagement || 0) + '%\n- السعر المقترح: ' + (d.price || 0).toLocaleString() + '$\n- السوق: ' + mkt + '\n\nمرفق سكرين شوت التحويل 👇';
+  var message = 'السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ' + cashNumber + ' عشان التقرير الكامل.\n\nبياناتي:\n- المنصة: ' + platName + '\n- المتابعين: ' + Number(d.followers||0).toLocaleString() + '\n- التفاعل: ' + (d.engagement||0) + '%\n- السعر المقترح: ' + Number(d.price||0).toLocaleString() + '$\n- السوق: ' + mkt + '\n\nمرفق سكرين شوت التحويل 👇';
   window.open('https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(message), '_blank');
   alert('✅ 1. حول 500 جنيه على: ' + cashNumber + '\n2. خد سكرين\n3. ابعت على واتساب: 01282175854\n4. هرد عليك بالتقرير الكامل');
 }
