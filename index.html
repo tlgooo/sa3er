@@ -40,7 +40,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .btn-primary{width:100%;padding:15px 20px;background:var(--teal-600);color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .2s;}
 .btn-primary:hover{opacity:.9;}
  
-/* ====== RESULT TEASER (مجاني) ====== */
 .result-teaser{display:none;margin-top:20px;}
  
 .result-profile{background:var(--teal-900);border-radius:var(--radius-lg);padding:22px 20px 0;overflow:hidden;margin-bottom:12px;}
@@ -61,7 +60,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .price-cur-new{font-size:11px;color:var(--text-muted);font-weight:700;}
 .price-rec-badge{font-size:10px;background:var(--teal-50);color:var(--teal-600);padding:2px 8px;border-radius:20px;font-weight:700;margin-bottom:4px;display:inline-block;}
  
-/* market compare */
 .market-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);padding:18px 20px;margin-bottom:12px;}
 .market-title{font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
 .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
@@ -71,7 +69,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .bar-val{font-size:12px;font-weight:700;color:var(--text-primary);width:55px;text-align:left;flex-shrink:0;font-family:'IBM Plex Mono',monospace;}
 .rank-badge{font-size:12px;font-weight:700;color:var(--teal-600);background:var(--teal-50);padding:6px 12px;border-radius:20px;display:inline-block;margin-top:6px;}
  
-/* ====== LOCKED SECTIONS ====== */
 .locked-section{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);padding:18px 20px;margin-bottom:12px;position:relative;overflow:hidden;}
 .locked-section::after{content:'';position:absolute;inset:0;background:rgba(245,253,249,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:2;}
 .lock-overlay{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
@@ -93,7 +90,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .ptip{background:var(--border-light);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text-primary);display:flex;align-items:flex-start;gap:8px;}
 .ptip-icon{color:var(--teal-600);font-size:15px;flex-shrink:0;margin-top:1px;}
  
-/* ====== CTA ====== */
 .cta-box{background:var(--teal-900);border-radius:var(--radius-lg);padding:22px 20px;text-align:center;margin-bottom:16px;}
 .cta-title{font-size:15px;font-weight:900;color:var(--white);margin-bottom:6px;}
 .cta-sub{font-size:12px;color:var(--teal-100);margin-bottom:16px;}
@@ -103,7 +99,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .btn-cash:hover{opacity:.9;}
 .btn-secondary{width:100%;padding:12px 20px;background:var(--white);color:var(--teal-600);border:1.5px solid var(--teal-600);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:opacity .2s;}
  
-/* ====== ADMIN / PDF (مخفي) ====== */
 .mk-preview{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);}
 .mk-header{background:var(--teal-900);padding:28px 24px;text-align:center;}
 .mk-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;font-weight:900;color:var(--white);}
@@ -117,6 +112,9 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
  
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 .fade-up{animation:fadeUp .5s ease forwards;}
+ 
+/* زرار التحميل وهو بيشتغل */
+.btn-loading{opacity:0.7;cursor:not-allowed;pointer-events:none;}
 </style>
 </head>
 <body>
@@ -169,10 +167,8 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
  
   <button class="btn-primary" onclick="calculate()"><i class="ti ti-calculator"></i> احسب سعري الآن</button>
  
-  <!-- ===== RESULT TEASER (مجاني - يظهر للكل) ===== -->
   <div class="result-teaser" id="resultTeaser">
  
-    <!-- بروفايل + الأسعار الـ3 -->
     <div class="result-profile fade-up">
       <div class="rp-top">
         <div class="rp-avatar" id="rpAvatar">م</div>
@@ -204,7 +200,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
       </div>
     </div>
  
-    <!-- مقارنة السوق (مجانية) -->
     <div class="market-card fade-up" style="animation-delay:.1s;">
       <div class="market-title"><i class="ti ti-chart-bar" style="font-size:16px;color:var(--teal-600)"></i> مقارنتك بالسوق</div>
       <div class="bar-row">
@@ -227,9 +222,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
       </div>
     </div>
  
-    <!-- ===== المحتوى المحجوب ===== -->
- 
-    <!-- نصايح التفاوض -->
     <div class="locked-section fade-up" style="animation-delay:.2s;min-height:180px;">
       <div class="ls-title"><i class="ti ti-bulb" style="font-size:16px;color:var(--teal-600)"></i> نصايح التفاوض الخاصة بيك</div>
       <div class="tip-row"><div class="tip-num">1</div><p class="tip-text">نظرًا لتفاعلك العالي، يمكنك طلب 20% فوق متوسط السوق بثقة تامة ولا تقبل أقل من الحد الأدنى.</p></div>
@@ -242,7 +234,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
       </div>
     </div>
  
-    <!-- الرسالة الجاهزة -->
     <div class="locked-section fade-up" style="animation-delay:.25s;min-height:140px;">
       <div class="ls-title"><i class="ti ti-message" style="font-size:16px;color:var(--teal-600)"></i> رسالة جاهزة ترد بيها على البراند</div>
       <div class="msg-preview">أهلًا، شكرًا على تواصلكم. بناءً على معدل التفاعل وحجم الجمهور المستهدف، سعر البوست الواحد يبدأ من... [النص الكامل محجوب]</div>
@@ -253,7 +244,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
       </div>
     </div>
  
-    <!-- تفصيل الباقات -->
     <div class="locked-section fade-up" style="animation-delay:.3s;min-height:160px;">
       <div class="ls-title"><i class="ti ti-packages" style="font-size:16px;color:var(--teal-600)"></i> أسعار كل أنواع المحتوى</div>
       <div class="pkg-grid">
@@ -269,7 +259,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
       </div>
     </div>
  
-    <!-- نصايح المنصة -->
     <div class="locked-section fade-up" style="animation-delay:.35s;min-height:150px;">
       <div class="ls-title"><i class="ti ti-star" style="font-size:16px;color:var(--teal-600)"></i> نصايح خاصة بـ<span id="lsPlatform">انستجرام</span></div>
       <div class="platform-tips">
@@ -283,7 +272,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
       </div>
     </div>
  
-    <!-- CTA الشراء -->
     <div class="cta-box fade-up" style="animation-delay:.4s;">
       <div class="cta-title">افتح التقرير الكامل</div>
       <div class="cta-sub">كل البيانات دي مخصصة ليك بناءً على أرقامك الفعلية</div>
@@ -296,14 +284,13 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
       <button class="btn-cash" onclick="buyPDF()"><i class="ti ti-wallet"></i> افتح التقرير الكامل — 500 جنيه فقط</button>
     </div>
  
-    <!-- زرار الميديا كيت كسيكندري -->
     <button class="btn-secondary" id="btnMediaKit" onclick="showMediaKit()" style="display:flex">
       <i class="ti ti-id-badge"></i> اعمل ميديا كيت PDF بعلامة مائية (مجاني)
     </button>
  
   </div>
  
-  <!-- ===== MEDIA KIT (PDF) ===== -->
+  <!-- MEDIA KIT -->
   <div class="mk-preview" id="mkPreview">
     <div class="mk-header" id="mkToPrint">
       <div class="mk-avatar">س</div>
@@ -320,7 +307,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
     <button class="btn-admin" id="adminBtn" onclick="generateFullReport()">🔑 توليد التقرير الكامل بـ AI - للأدمن فقط</button>
   </div>
  
-  <!-- ===== تقرير كامل للأدمن ===== -->
+  <!-- تقرير كامل للأدمن -->
   <div id="fullReportSection" style="display:none;margin-top:16px;">
     <div class="card" style="border:2px solid var(--teal-600);">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
@@ -336,35 +323,32 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
         <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">ثواني بس</div>
       </div>
       <div id="aiReportContent" style="display:none;">
-        <!-- نصايح التفاوض -->
         <div style="margin-bottom:18px;">
           <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
             <i class="ti ti-bulb" style="font-size:14px;"></i> نصايح التفاوض المخصصة
           </div>
           <div id="aiTips" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--teal-50);border-radius:12px;padding:14px;white-space:pre-line;"></div>
         </div>
-        <!-- الرسالة الجاهزة -->
         <div style="margin-bottom:18px;">
           <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
             <i class="ti ti-message" style="font-size:14px;"></i> رسالة جاهزة للبراند
           </div>
           <div id="aiMessage" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--border-light);border-radius:12px;padding:14px;white-space:pre-line;border-right:3px solid var(--teal-600);"></div>
         </div>
-        <!-- الباقات -->
         <div style="margin-bottom:18px;">
           <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
             <i class="ti ti-packages" style="font-size:14px;"></i> تفصيل الباقات والأسعار
           </div>
           <div id="aiPackages" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--border-light);border-radius:12px;padding:14px;white-space:pre-line;"></div>
         </div>
-        <!-- نصايح المنصة -->
         <div style="margin-bottom:20px;">
           <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
             <i class="ti ti-star" style="font-size:14px;"></i> نصايح خاصة بالمنصة
           </div>
           <div id="aiPlatformTips" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--border-light);border-radius:12px;padding:14px;white-space:pre-line;"></div>
         </div>
-        <button class="btn-primary" onclick="downloadFullReportPDF()" style="margin-bottom:8px;">
+        <!-- ✅ زرار التحميل مع حالة loading -->
+        <button class="btn-primary" id="btnDownloadPDF" onclick="downloadFullReportPDF()">
           <i class="ti ti-download"></i> حمّل PDF كامل وابعته للعميل
         </button>
       </div>
@@ -399,30 +383,24 @@ function calculate() {
   const marketAvg = Math.round(base * 0.55);
   const topPeer = Math.round(base * 1.2);
  
-  // حساب السكور (من 100)
   const engScore = Math.min(engagement / 7 * 40, 40);
   const follScore = Math.min(followers / 200000 * 35, 35);
   const mktScore = market === 'arab' ? 25 : 18;
   const score = Math.round(engScore + follScore + mktScore);
- 
-  // حساب الرانك
   const rankPct = Math.max(5, Math.round(100 - score));
  
   savedData = {followers, engagement, platform, market, price: rec, min, max, marketAvg, topPeer, score, rankPct};
  
-  // تحديث البروفايل
   const platName = platformNames[platform] || platform;
   const mktLabel = market === 'egypt' ? 'مصر' : 'عربي عام';
   document.getElementById('rpPlatform').textContent = (platformIcons[platform]||'') + ' ' + platName;
   document.getElementById('rpMeta').textContent = followers.toLocaleString() + ' متابع · ' + engagement + '% تفاعل · ' + mktLabel;
   document.getElementById('rpScore').textContent = score;
  
-  // الأسعار
   document.getElementById('priceMin').textContent = min.toLocaleString();
   document.getElementById('priceRec').textContent = rec.toLocaleString();
   document.getElementById('priceMax').textContent = max.toLocaleString();
  
-  // البارات
   const topVal = topPeer;
   const pct = v => Math.round(Math.min(v / topVal * 90, 95));
   setTimeout(() => {
@@ -434,13 +412,9 @@ function calculate() {
   document.getElementById('barYouVal').textContent = '$' + rec.toLocaleString();
   document.getElementById('barTopVal').textContent = '$' + topPeer.toLocaleString();
  
-  // الرانك باج
   document.getElementById('rankBadge').textContent = 'أنت في أعلى ' + rankPct + '% من المؤثرين في نفس الكاتيجوري';
- 
-  // اسم المنصة في الأقسام المحجوبة
   document.querySelectorAll('#lsPlatform, #lsPlatform2').forEach(el => el.textContent = platName);
  
-  // إظهار النتيجة
   document.getElementById('resultTeaser').style.display = 'block';
   document.getElementById('resultTeaser').scrollIntoView({behavior:'smooth', block:'start'});
 }
@@ -480,6 +454,9 @@ async function downloadPDF(isPaid) {
 async function generateFullReport() {
   const d = savedData;
   if(!d.followers) { alert('احسب السعر الأول'); return; }
+ 
+  // reset aiReportData عشان نمنع تحميل تقرير قديم
+  aiReportData = {};
  
   document.getElementById('fullReportSection').style.display = 'block';
   document.getElementById('aiLoadingState').style.display = 'block';
@@ -558,10 +535,20 @@ async function generateFullReport() {
   }
 }
  
+// ✅ الفانكشن المُصلحة
 function downloadFullReportPDF() {
+  // ✅ تأكد إن التقرير اتولد فعلاً
+  if (!aiReportData.tips && !aiReportData.message) {
+    alert('⚠️ التقرير لسه بيتولد — استنى ثواني وجرب تاني');
+    return;
+  }
+ 
   const d = savedData;
   const platName = platformNames[d.platform] || d.platform;
   const mktLabel = d.market === 'egypt' ? 'مصر' : 'عربي عام';
+ 
+  // ✅ تحويل النص للـ HTML بشكل آمن (بدون XSS)
+  const safe = (str) => (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
  
   const html = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -584,17 +571,21 @@ function downloadFullReportPDF() {
   .price-rec-lbl{font-size:10px;color:#0F6E56;font-weight:700;margin-bottom:4px;}
   .section{padding:24px 40px;border-bottom:1px solid #e2f5ec;}
   .section-title{background:#0F6E56;color:white;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:900;margin-bottom:14px;display:inline-block;}
-  .section-body{font-size:13px;line-height:2;color:#0d2b1f;white-space:pre-line;background:#f5fdf9;border-radius:10px;padding:16px;}
+  .section-body{font-size:13px;line-height:2;color:#0d2b1f;white-space:pre-wrap;background:#f5fdf9;border-radius:10px;padding:16px;}
   .msg-body{border-right:4px solid #0F6E56;background:#E1F5EE;}
+  .print-btn{margin:20px 40px;padding:14px 24px;background:#0F6E56;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;width:calc(100% - 80px);}
   .footer{background:#04342C;color:#5DCAA5;text-align:center;padding:16px;font-size:11px;}
-  @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  @media print{
+    .print-btn{display:none;}
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
 </style>
 </head>
 <body>
 <div class="header">
   <h1>سعّر — التقرير الكامل</h1>
   <p>تقرير تسعير احترافي للمؤثرين العرب</p>
-  <div class="meta">${platName} · ${d.followers.toLocaleString()} متابع · ${d.engagement}% تفاعل · ${mktLabel}</div>
+  <div class="meta">${safe(platName)} · ${d.followers.toLocaleString()} متابع · ${d.engagement}% تفاعل · ${safe(mktLabel)}</div>
 </div>
 <div class="prices">
   <div class="price-cell">
@@ -612,28 +603,45 @@ function downloadFullReportPDF() {
 </div>
 <div class="section">
   <div class="section-title">💡 نصايح التفاوض</div>
-  <div class="section-body">${aiReportData.tips || ''}</div>
+  <div class="section-body">${safe(aiReportData.tips)}</div>
 </div>
 <div class="section">
   <div class="section-title">💬 الرسالة الجاهزة للبراند</div>
-  <div class="section-body msg-body">${aiReportData.message || ''}</div>
+  <div class="section-body msg-body">${safe(aiReportData.message)}</div>
 </div>
 <div class="section">
   <div class="section-title">📦 الباقات والأسعار</div>
-  <div class="section-body">${aiReportData.packages || ''}</div>
+  <div class="section-body">${safe(aiReportData.packages)}</div>
 </div>
 <div class="section">
-  <div class="section-title">⭐ نصايح خاصة بـ${platName}</div>
-  <div class="section-body">${aiReportData.platformTips || ''}</div>
+  <div class="section-title">⭐ نصايح خاصة بـ${safe(platName)}</div>
+  <div class="section-body">${safe(aiReportData.platformTips)}</div>
 </div>
+<button class="print-btn" onclick="window.print()">🖨️ اطبع / احفظ كـ PDF</button>
 <div class="footer">SA3ER.COM — أداة تسعير احترافية للمؤثرين العرب</div>
 </body>
 </html>`;
  
+  // ✅ فتح النافذة وانتظار تحميل الفونت قبل أي حاجة
   const win = window.open('', '_blank');
+  if (!win) {
+    alert('المتصفح منع فتح نافذة جديدة — سمح للـ popups من الموقع');
+    return;
+  }
   win.document.write(html);
   win.document.close();
-  win.onload = () => { win.focus(); win.print(); };
+ 
+  // ✅ ننتظر الفونت يتحمل، بعدين نعرض الصفحة
+  win.onload = () => {
+    if (win.document.fonts && win.document.fonts.ready) {
+      win.document.fonts.ready.then(() => {
+        // مش بنطبع تلقائياً — المستخدم يضغط الزرار الأخضر
+        win.focus();
+      });
+    } else {
+      win.focus();
+    }
+  };
 }
  
 function buyPDF() {
