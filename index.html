@@ -33,7 +33,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .field select,.field input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:12px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.chip{padding:8px 15px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-muted);}
+.chip{padding:8px 15px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:700;cursor:pointer;background:var(--white);color:var(--text-muted);transition:all .2s;}
 .chip.active{background:var(--teal-600);border-color:var(--teal-600);color:var(--white);}
 .btn-primary{width:100%;padding:15px 20px;background:var(--teal-600);color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .2s;}
 .btn-primary:hover{opacity:.9;}
@@ -84,7 +84,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 .cta-box{background:var(--teal-900);border-radius:var(--radius-lg);padding:22px 20px;text-align:center;margin-bottom:16px;}
 .cta-title{font-size:15px;font-weight:900;color:var(--white);margin-bottom:6px;}
 .cta-sub{font-size:12px;color:var(--teal-100);margin-bottom:16px;}
-.locked-count{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px;}
+.locked-count{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .lc-item{background:rgba(255,255,255,0.12);border-radius:8px;padding:5px 11px;font-size:12px;color:var(--white);font-weight:700;}
 .btn-cash{width:100%;padding:15px 20px;background:#25D366;color:var(--white);border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .2s;}
 .btn-cash:hover{opacity:.9;}
@@ -211,7 +211,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
     <div class="locked-section fade-up" style="animation-delay:.2s;min-height:180px;">
       <div class="ls-title"><i class="ti ti-bulb" style="font-size:16px;color:var(--teal-600)"></i> نصايح التفاوض الخاصة بيك</div>
       <div class="tip-row"><div class="tip-num">1</div><p class="tip-text">نظرًا لتفاعلك العالي، يمكنك طلب 20% فوق متوسط السوق بثقة تامة ولا تقبل أقل من الحد الأدنى.</p></div>
-      <div class="tip-row"><div class="tip-num">2</div><p class="tip-text">البراندات في قطاع الفاشون والبيوتي مستعدة تدفع 30-40% أكثر لمعدل تفاعلك.</p></div>
+      <div class="tip-row"><div class="tip-num">2</div><p class="tip-text">البراندات في قطاع الفاشون والبيوتي مستعدة تدفع 30-40% أكتر لمعدل تفاعلك.</p></div>
       <div class="tip-row"><div class="tip-num">3</div><p class="tip-text">لو البراند طلب ديسكونت، اعرض تقليص المحتوى مش السعر.</p></div>
       <div class="lock-overlay">
         <div class="lock-icon"><i class="ti ti-lock"></i></div>
@@ -343,142 +343,184 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
 </div>
  
 <script> 
+// *** البيانات المحفوظة ***
 let savedData = {};
 let aiReportData = {};
+ 
+// *** مفتاح API — ضعه هنا ***
+const API_KEY = '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';
  
 const platformNames = {instagram:'انستجرام',tiktok:'تيك توك',youtube:'يوتيوب',facebook:'فيسبوك',twitter:'تويتر / X'};
 const platformIcons = {instagram:'📸',tiktok:'🎵',youtube:'▶️',facebook:'👤',twitter:'🐦'};
  
-// *** ضع مفتاحك هنا بين علامات الاقتباس ***
-const API_KEY = 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
+// ========== FIX 1: selectChip — يحفظ الاختيار صح ==========
+function selectChip(el, group) {
+  // ازل active من كل الـ chips في نفس الـ group
+  var container = document.getElementById(group + 'Chips');
+  if (!container) return;
+  container.querySelectorAll('.chip').forEach(function(c) {
+    c.classList.remove('active');
+  });
+  el.classList.add('active');
+}
  
+// ========== FIX 2: calculate — يقرأ اختيار السوق صح ==========
 function calculate() {
-  const followers = parseInt(document.getElementById('followers').value) || 0;
-  const engagement = parseFloat(document.getElementById('engagement').value) || 0;
-  const platform = document.getElementById('platform').value;
-  const market = document.querySelector('#marketChips .chip.active')?.dataset.v || 'arab';
+  var followers = parseInt(document.getElementById('followers').value) || 0;
+  var engagement = parseFloat(document.getElementById('engagement').value) || 0;
+  var platform = document.getElementById('platform').value;
  
-  if(!platform || followers <= 0 || !engagement) {
+  // قراءة السوق من الـ chip النشط — بنقرأ data-v مباشرة
+  var activeChip = document.querySelector('#marketChips .chip.active');
+  var market = activeChip ? activeChip.getAttribute('data-v') : 'arab';
+ 
+  if (!platform || followers <= 0 || !engagement) {
     alert('املى كل البيانات المطلوبة');
     return;
   }
  
-  let baseRate = market === 'egypt' ? 0.003 : 0.005;
-  const base = followers * baseRate * (engagement/3);
-  const min = Math.round(base * 0.7);
-  const rec = Math.round(base);
-  const max = Math.round(base * 1.5);
-  const marketAvg = Math.round(base * 0.55);
-  const topPeer = Math.round(base * 1.2);
+  var baseRate = (market === 'egypt') ? 0.003 : 0.005;
+  var base = followers * baseRate * (engagement / 3);
+  var min = Math.round(base * 0.7);
+  var rec = Math.round(base);
+  var max = Math.round(base * 1.5);
+  var marketAvg = Math.round(base * 0.55);
+  var topPeer = Math.round(base * 1.2);
  
-  const engScore = Math.min(engagement / 7 * 40, 40);
-  const follScore = Math.min(followers / 200000 * 35, 35);
-  const mktScore = market === 'arab' ? 25 : 18;
-  const score = Math.round(engScore + follScore + mktScore);
-  const rankPct = Math.max(5, Math.round(100 - score));
+  var engScore = Math.min(engagement / 7 * 40, 40);
+  var follScore = Math.min(followers / 200000 * 35, 35);
+  var mktScore = (market === 'arab') ? 25 : 18;
+  var score = Math.round(engScore + follScore + mktScore);
+  var rankPct = Math.max(5, Math.round(100 - score));
  
-  savedData = {followers, engagement, platform, market, price: rec, min, max, marketAvg, topPeer, score, rankPct};
+  // *** حفظ كل البيانات في savedData بشكل صحيح ***
+  savedData = {
+    followers: followers,
+    engagement: engagement,
+    platform: platform,
+    market: market,
+    price: rec,
+    min: min,
+    max: max,
+    marketAvg: marketAvg,
+    topPeer: topPeer,
+    score: score,
+    rankPct: rankPct
+  };
  
-  const platName = platformNames[platform] || platform;
-  const mktLabel = market === 'egypt' ? 'مصر' : 'عربي عام';
-  document.getElementById('rpPlatform').textContent = (platformIcons[platform]||'') + ' ' + platName;
-  document.getElementById('rpMeta').textContent = followers.toLocaleString() + ' متابع · ' + engagement + '% تفاعل · ' + mktLabel;
+  var platName = platformNames[platform] || platform;
+  var mktLabel = (market === 'egypt') ? 'مصر' : 'عربي عام';
+ 
+  document.getElementById('rpPlatform').textContent = (platformIcons[platform] || '') + ' ' + platName;
+  document.getElementById('rpMeta').textContent = followers.toLocaleString('ar-EG') + ' متابع · ' + engagement + '% تفاعل · ' + mktLabel;
   document.getElementById('rpScore').textContent = score;
  
-  document.getElementById('priceMin').textContent = min.toLocaleString();
-  document.getElementById('priceRec').textContent = rec.toLocaleString();
-  document.getElementById('priceMax').textContent = max.toLocaleString();
+  document.getElementById('priceMin').textContent = min.toLocaleString('ar-EG');
+  document.getElementById('priceRec').textContent = rec.toLocaleString('ar-EG');
+  document.getElementById('priceMax').textContent = max.toLocaleString('ar-EG');
  
-  const pct = v => Math.round(Math.min(v / topPeer * 90, 95));
-  setTimeout(() => {
+  var pct = function(v) { return Math.round(Math.min(v / topPeer * 90, 95)); };
+  setTimeout(function() {
     document.getElementById('barMarket').style.width = pct(marketAvg) + '%';
     document.getElementById('barYou').style.width = pct(rec) + '%';
     document.getElementById('barTop').style.width = pct(topPeer) + '%';
   }, 100);
-  document.getElementById('barMarketVal').textContent = '$' + marketAvg.toLocaleString();
-  document.getElementById('barYouVal').textContent = '$' + rec.toLocaleString();
-  document.getElementById('barTopVal').textContent = '$' + topPeer.toLocaleString();
+  document.getElementById('barMarketVal').textContent = '$' + marketAvg.toLocaleString('ar-EG');
+  document.getElementById('barYouVal').textContent = '$' + rec.toLocaleString('ar-EG');
+  document.getElementById('barTopVal').textContent = '$' + topPeer.toLocaleString('ar-EG');
  
   document.getElementById('rankBadge').textContent = 'أنت في أعلى ' + rankPct + '% من المؤثرين في نفس الكاتيجوري';
-  document.querySelectorAll('#lsPlatform, #lsPlatform2').forEach(el => el.textContent = platName);
  
-  document.getElementById('resultTeaser').style.display = 'block';
-  document.getElementById('resultTeaser').scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('#lsPlatform, #lsPlatform2').forEach(function(el) {
+    el.textContent = platName;
+  });
+ 
+  var teaser = document.getElementById('resultTeaser');
+  teaser.style.display = 'block';
+  setTimeout(function() {
+    teaser.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
 }
  
 function showMediaKit() {
-  document.getElementById('mkFollowers').textContent = savedData.followers.toLocaleString();
-  document.getElementById('mkPrice').textContent = savedData.price + '$';
-  document.getElementById('mkMin').textContent = savedData.min + '$';
-  document.getElementById('mkEng').textContent = savedData.engagement + '%';
-  document.getElementById('mkMarket').textContent = document.querySelector('#marketChips .chip.active').textContent.replace(/🇪🇬|🌍/g,'').trim();
+  var d = savedData;
+  if (!d.followers) { alert('احسب السعر الأول'); return; }
+ 
+  document.getElementById('mkFollowers').textContent = d.followers.toLocaleString('ar-EG');
+  document.getElementById('mkPrice').textContent = d.price.toLocaleString('ar-EG') + '$';
+  document.getElementById('mkMin').textContent = d.min.toLocaleString('ar-EG') + '$';
+  document.getElementById('mkEng').textContent = d.engagement + '%';
+ 
+  var activeChip = document.querySelector('#marketChips .chip.active');
+  var mktText = activeChip ? activeChip.textContent.replace(/🇪🇬|🌍/g, '').trim() : 'عربي عام';
+  document.getElementById('mkMarket').textContent = mktText;
+ 
   document.getElementById('mkPreview').style.display = 'block';
+  document.getElementById('mkPreview').scrollIntoView({ behavior: 'smooth' });
   setTimeout(checkAdmin, 200);
 }
  
 function checkAdmin() {
-  if(window.location.href.includes('admin=sa3er')) {
+  if (window.location.href.includes('admin=sa3er')) {
     document.getElementById('adminBtn').style.display = 'flex';
   }
 }
  
 async function downloadPDF(isPaid) {
-  const { jsPDF } = window.jspdf;
-  const element = document.getElementById('mkToPrint');
-  const canvas = await html2canvas(element, {scale: 2, backgroundColor: '#ffffff'});
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  const w = pdf.internal.pageSize.getWidth();
-  const h = (canvas.height * w) / canvas.width;
-  pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
-  if(!isPaid) {
-    pdf.setFontSize(28);
-    pdf.setTextColor(200,200,200);
-    pdf.text('SA3ER.COM - نسخة مجانية', w/2, h/2, {angle: 45, align: 'center'});
+  var d = savedData;
+  if (!d.followers) { alert('احسب السعر الأول'); return; }
+ 
+  try {
+    var { jsPDF } = window.jspdf;
+    var element = document.getElementById('mkToPrint');
+    var canvas = await html2canvas(element, { scale: 2, backgroundColor: '#04342C' });
+    var pdf = new jsPDF('p', 'mm', 'a4');
+    var w = pdf.internal.pageSize.getWidth();
+    var h = (canvas.height * w) / canvas.width;
+    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
+    if (!isPaid) {
+      pdf.setFontSize(28);
+      pdf.setTextColor(200, 200, 200);
+      pdf.text('SA3ER.COM - نسخة مجانية', w / 2, h / 2, { angle: 45, align: 'center' });
+    }
+    pdf.save(isPaid ? 'MediaKit_Nadeef.pdf' : 'MediaKit_Free.pdf');
+  } catch(e) {
+    alert('حصل خطأ في تحميل PDF — جرب تاني');
+    console.error(e);
   }
-  pdf.save(isPaid ? 'MediaKit_Nadeef.pdf' : 'MediaKit_Free.pdf');
 }
  
 async function generateFullReport() {
-  const d = savedData;
-  if(!d.followers) { alert('احسب السعر الأول'); return; }
+  var d = savedData;
+  if (!d.followers) { alert('احسب السعر الأول'); return; }
  
   aiReportData = {};
  
   document.getElementById('fullReportSection').style.display = 'block';
   document.getElementById('aiLoadingState').style.display = 'block';
   document.getElementById('aiReportContent').style.display = 'none';
-  document.getElementById('fullReportSection').scrollIntoView({behavior:'smooth'});
+  document.getElementById('fullReportSection').scrollIntoView({ behavior: 'smooth' });
  
-  const platName = platformNames[d.platform] || d.platform;
-  const mktLabel = d.market === 'egypt' ? 'مصر' : 'السوق العربي';
+  var platName = platformNames[d.platform] || d.platform;
+  var mktLabel = (d.market === 'egypt') ? 'مصر' : 'السوق العربي';
  
-  const prompt = `أنت خبير تسعير للمؤثرين في العالم العربي. بناءً على البيانات التالية، اكتب تقريراً احترافياً كاملاً باللغة العربية العامية المصرية.
- 
-بيانات المؤثر:
-- المنصة: ${platName}
-- عدد المتابعين: ${d.followers.toLocaleString()}
-- معدل التفاعل: ${d.engagement}%
-- السوق: ${mktLabel}
-- الحد الأدنى للسعر: $${d.min}
-- السعر المقترح: $${d.price}
-- الحد الأقصى: $${d.max}
- 
-اكتب بالضبط 4 أقسام منفصلة، كل قسم يبدأ بعلامة === واسم القسم ===:
- 
-=== نصايح التفاوض ===
-(اكتب 4 نصايح عملية ومخصصة للأرقام دي، كل نصيحة في سطر جديد تبدأ بـ •)
- 
-=== الرسالة الجاهزة ===
-(اكتب رسالة واتساب/إيميل جاهزة يبعتها المؤثر للبراند، بأسلوب احترافي وودود، تتضمن الأسعار بالظبط)
- 
-=== الباقات والأسعار ===
-(اكتب 4 باقات بأسعار مخصصة بناءً على الأرقام، كل باقة في سطر: اسم الباقة: السعر — وصف مختصر)
- 
-=== نصايح المنصة ===
-(اكتب 3 نصايح خاصة بـ${platName} تساعد المؤثر يحصل على سعر أعلى، كل نصيحة في سطر تبدأ بـ ✓)`;
+  var prompt = 'أنت خبير تسعير للمؤثرين في العالم العربي. بناءً على البيانات التالية، اكتب تقريراً احترافياً كاملاً باللغة العربية العامية المصرية.\n\n' +
+    'بيانات المؤثر:\n' +
+    '- المنصة: ' + platName + '\n' +
+    '- عدد المتابعين: ' + d.followers.toLocaleString() + '\n' +
+    '- معدل التفاعل: ' + d.engagement + '%\n' +
+    '- السوق: ' + mktLabel + '\n' +
+    '- الحد الأدنى للسعر: $' + d.min + '\n' +
+    '- السعر المقترح: $' + d.price + '\n' +
+    '- الحد الأقصى: $' + d.max + '\n\n' +
+    'اكتب بالضبط 4 أقسام منفصلة، كل قسم يبدأ بعلامة === واسم القسم ===:\n\n' +
+    '=== نصايح التفاوض ===\n(اكتب 4 نصايح عملية ومخصصة للأرقام دي، كل نصيحة في سطر جديد تبدأ بـ •)\n\n' +
+    '=== الرسالة الجاهزة ===\n(اكتب رسالة واتساب/إيميل جاهزة يبعتها المؤثر للبراند، بأسلوب احترافي وودود، تتضمن الأسعار بالظبط)\n\n' +
+    '=== الباقات والأسعار ===\n(اكتب 4 باقات بأسعار مخصصة بناءً على الأرقام، كل باقة في سطر: اسم الباقة: السعر — وصف مختصر)\n\n' +
+    '=== نصايح المنصة ===\n(اكتب 3 نصايح خاصة بـ' + platName + ' تساعد المؤثر يحصل على سعر أعلى، كل نصيحة في سطر تبدأ بـ ✓)';
  
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -489,22 +531,23 @@ async function generateFullReport() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1500,
-        messages: [{role: 'user', content: prompt}]
+        messages: [{ role: 'user', content: prompt }]
       })
     });
-    const data = await res.json();
-    const text = data.content?.[0]?.text || '';
+    var data = await res.json();
+    var text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '';
  
-    const getSection = (name) => {
-      const rx = new RegExp('=== ' + name + ' ===\\s*([\\s\\S]*?)(?====|$)');
-      return (text.match(rx)?.[1] || '').trim();
-    };
+    function getSection(name) {
+      var rx = new RegExp('=== ' + name + ' ===\\s*([\\s\\S]*?)(?====|$)');
+      var m = text.match(rx);
+      return m ? m[1].trim() : '';
+    }
  
     aiReportData = {
       tips: getSection('نصايح التفاوض'),
       message: getSection('الرسالة الجاهزة'),
       packages: getSection('الباقات والأسعار'),
-      platformTips: getSection('نصايح المنصة'),
+      platformTips: getSection('نصايح المنصة')
     };
  
     document.getElementById('aiTips').textContent = aiReportData.tips;
@@ -516,27 +559,38 @@ async function generateFullReport() {
     document.getElementById('aiReportContent').style.display = 'block';
  
   } catch(e) {
-    document.getElementById('aiLoadingState').innerHTML = '<div style="color:red;font-size:13px;">حصل خطأ — جرب تاني</div>';
+    document.getElementById('aiLoadingState').innerHTML = '<div style="color:red;font-size:13px;padding:20px;">حصل خطأ في الاتصال بـ AI — تأكد من المفتاح وجرب تاني</div>';
+    console.error(e);
   }
 }
  
+// ========== FIX 3: downloadFullReportPDF — بيبعت البيانات للنافذة الجديدة صح ==========
 function downloadFullReportPDF() {
-  if (!aiReportData.tips && !aiReportData.message) {
+  if (!aiReportData.tips && !aiReportData.message && !aiReportData.packages) {
     alert('⚠️ التقرير لسه بيتولد — استنى ثواني وجرب تاني');
     return;
   }
  
-  const d = savedData;
-  const platName = platformNames[d.platform] || d.platform;
-  const mktLabel = d.market === 'egypt' ? 'مصر' : 'عربي عام';
-  const safe = (str) => (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var d = savedData;
+  var platName = platformNames[d.platform] || d.platform || '—';
+  var mktLabel = (d.market === 'egypt') ? 'مصر' : 'عربي عام';
  
-  const html = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">' +
+  // دالة تأمين HTML
+  function safe(str) {
+    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+ 
+  // *** الإصلاح الرئيسي: بنحول البيانات لـ JSON ونحطها في الصفحة مباشرة ***
+  var html = '<!DOCTYPE html><html lang="ar" dir="rtl">' +
+    '<head><meta charset="UTF-8">' +
     '<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">' +
-    '<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Cairo,sans-serif;background:#fff;color:#0d2b1f;direction:rtl;}' +
+    '<style>' +
+    '*{margin:0;padding:0;box-sizing:border-box;}' +
+    'body{font-family:Cairo,sans-serif;background:#fff;color:#0d2b1f;direction:rtl;}' +
     '.header{background:#04342C;color:white;padding:30px 40px;text-align:center;}' +
     '.header h1{font-size:28px;font-weight:900;margin-bottom:4px;}' +
-    '.header p{font-size:13px;color:#9FE1CB;}.header .meta{font-size:12px;color:#5DCAA5;margin-top:8px;}' +
+    '.header p{font-size:13px;color:#9FE1CB;}' +
+    '.header .meta{font-size:12px;color:#5DCAA5;margin-top:8px;}' +
     '.prices{display:grid;grid-template-columns:1fr 1fr 1fr;background:#E1F5EE;}' +
     '.price-cell{padding:20px;text-align:center;border-left:1px solid #c8ede0;}' +
     '.price-lbl{font-size:11px;color:#6b9e87;font-weight:700;margin-bottom:6px;}' +
@@ -551,48 +605,62 @@ function downloadFullReportPDF() {
     '.footer{background:#04342C;color:#5DCAA5;text-align:center;padding:16px;font-size:11px;}' +
     '@media print{.print-btn{display:none;}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}' +
     '</style></head><body>' +
-    '<div class="header"><h1>سعّر — التقرير الكامل</h1><p>تقرير تسعير احترافي للمؤثرين العرب</p>' +
-    '<div class="meta">' + safe(platName) + ' · ' + d.followers.toLocaleString() + ' متابع · ' + d.engagement + '% تفاعل · ' + safe(mktLabel) + '</div></div>' +
-    '<div class="prices">' +
-    '<div class="price-cell"><div class="price-lbl">الحد الأدنى</div><div class="price-num">$' + d.min.toLocaleString() + '</div></div>' +
-    '<div class="price-cell"><div class="price-rec-lbl">✓ السعر الصح</div><div class="price-num rec">$' + d.price.toLocaleString() + '</div></div>' +
-    '<div class="price-cell"><div class="price-lbl">الحد الأقصى</div><div class="price-num">$' + d.max.toLocaleString() + '</div></div>' +
+ 
+    '<div class="header">' +
+    '<h1>سعّر — التقرير الكامل</h1>' +
+    '<p>تقرير تسعير احترافي للمؤثرين العرب</p>' +
+    '<div class="meta">' + safe(platName) + ' · ' + (d.followers || 0).toLocaleString('ar-EG') + ' متابع · ' + (d.engagement || 0) + '% تفاعل · ' + safe(mktLabel) + '</div>' +
     '</div>' +
-    '<div class="section"><div class="section-title">💡 نصايح التفاوض</div><div class="section-body">' + safe(aiReportData.tips) + '</div></div>' +
-    '<div class="section"><div class="section-title">💬 الرسالة الجاهزة للبراند</div><div class="section-body msg-body">' + safe(aiReportData.message) + '</div></div>' +
-    '<div class="section"><div class="section-title">📦 الباقات والأسعار</div><div class="section-body">' + safe(aiReportData.packages) + '</div></div>' +
-    '<div class="section"><div class="section-title">⭐ نصايح خاصة بـ' + safe(platName) + '</div><div class="section-body">' + safe(aiReportData.platformTips) + '</div></div>' +
+ 
+    '<div class="prices">' +
+    '<div class="price-cell"><div class="price-lbl">الحد الأدنى</div><div class="price-num">$' + (d.min || 0).toLocaleString('ar-EG') + '</div></div>' +
+    '<div class="price-cell"><div class="price-rec-lbl">✓ السعر الصح</div><div class="price-num rec">$' + (d.price || 0).toLocaleString('ar-EG') + '</div></div>' +
+    '<div class="price-cell"><div class="price-lbl">الحد الأقصى</div><div class="price-num">$' + (d.max || 0).toLocaleString('ar-EG') + '</div></div>' +
+    '</div>' +
+ 
+    '<div class="section"><div class="section-title">💡 نصايح التفاوض</div>' +
+    '<div class="section-body">' + safe(aiReportData.tips) + '</div></div>' +
+ 
+    '<div class="section"><div class="section-title">💬 الرسالة الجاهزة للبراند</div>' +
+    '<div class="section-body msg-body">' + safe(aiReportData.message) + '</div></div>' +
+ 
+    '<div class="section"><div class="section-title">📦 الباقات والأسعار</div>' +
+    '<div class="section-body">' + safe(aiReportData.packages) + '</div></div>' +
+ 
+    '<div class="section"><div class="section-title">⭐ نصايح خاصة بـ' + safe(platName) + '</div>' +
+    '<div class="section-body">' + safe(aiReportData.platformTips) + '</div></div>' +
+ 
     '<button class="print-btn" onclick="window.print()">🖨️ اطبع / احفظ كـ PDF</button>' +
     '<div class="footer">SA3ER.COM — أداة تسعير احترافية للمؤثرين العرب</div>' +
     '</body></html>';
  
-  const win = window.open('', '_blank');
-  if (!win) { alert('المتصفح منع فتح نافذة جديدة — سمح للـ popups من الموقع'); return; }
-  win.document.write(html);
-  win.document.close();
-  win.onload = () => {
-    if (win.document.fonts && win.document.fonts.ready) {
-      win.document.fonts.ready.then(() => { win.focus(); });
-    } else {
-      win.focus();
-    }
-  };
+  // *** استخدام Blob بدل window.open مع document.write — أضمن بكتير ***
+  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var win = window.open(url, '_blank');
+ 
+  if (!win) {
+    // لو المتصفح بلوك الـ popup، حمّله مباشرة
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'sa3er_report.html';
+    a.click();
+    alert('تم تحميل التقرير كملف HTML — افتحه في المتصفح وعمل Print > Save as PDF');
+  }
+ 
+  // تنظيف الـ URL بعد فتره
+  setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
 }
  
 function buyPDF() {
-  const cashNumber = '01062183539';
-  const whatsappNumber = '201282175854';
-  const d = savedData;
-  const mkt = d.market === 'egypt' ? 'مصر' : 'عربي عام';
-  const platName = platformNames[d.platform] || d.platform || '—';
-  const message = 'السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ' + cashNumber + ' عشان التقرير الكامل.\n\nبياناتي:\n- المنصة: ' + platName + '\n- المتابعين: ' + (d.followers||0).toLocaleString() + '\n- التفاعل: ' + (d.engagement||0) + '%\n- السعر المقترح: ' + (d.price||0).toLocaleString() + '$\n- السوق: ' + mkt + '\n\nمرفق سكرين شوت التحويل 👇';
+  var cashNumber = '01062183539';
+  var whatsappNumber = '201282175854';
+  var d = savedData;
+  var mkt = (d.market === 'egypt') ? 'مصر' : 'عربي عام';
+  var platName = platformNames[d.platform] || d.platform || '—';
+  var message = 'السلام عليكم 👋\nحولت 500 جنيه فودافون كاش على رقم ' + cashNumber + ' عشان التقرير الكامل.\n\nبياناتي:\n- المنصة: ' + platName + '\n- المتابعين: ' + (d.followers || 0).toLocaleString() + '\n- التفاعل: ' + (d.engagement || 0) + '%\n- السعر المقترح: ' + (d.price || 0).toLocaleString() + '$\n- السوق: ' + mkt + '\n\nمرفق سكرين شوت التحويل 👇';
   window.open('https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(message), '_blank');
   alert('✅ 1. حول 500 جنيه على: ' + cashNumber + '\n2. خد سكرين\n3. ابعت على واتساب: 01282175854\n4. هرد عليك بالتقرير الكامل');
-}
- 
-function selectChip(el, group) {
-  document.querySelectorAll('#' + group + 'Chips .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
 }
  
 window.addEventListener('load', checkAdmin);
