@@ -558,78 +558,82 @@ async function generateFullReport() {
   }
 }
  
-async function downloadFullReportPDF() {
-  const { jsPDF } = window.jspdf;
+function downloadFullReportPDF() {
   const d = savedData;
   const platName = platformNames[d.platform] || d.platform;
   const mktLabel = d.market === 'egypt' ? 'مصر' : 'عربي عام';
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  const w = pdf.internal.pageSize.getWidth();
-  const margin = 20;
-  const maxW = w - margin * 2;
-  let y = 20;
  
-  // هيدر
-  pdf.setFillColor(4, 52, 44);
-  pdf.rect(0, 0, w, 40, 'F');
-  pdf.setTextColor(255,255,255);
-  pdf.setFont('helvetica','bold');
-  pdf.setFontSize(20);
-  pdf.text('SA3ER.COM', w/2, 18, {align:'center'});
-  pdf.setFontSize(11);
-  pdf.text('Full Influencer Pricing Report', w/2, 28, {align:'center'});
-  pdf.setFontSize(9);
-  pdf.text(platName + ' | ' + d.followers.toLocaleString() + ' followers | ' + d.engagement + '% eng | ' + mktLabel, w/2, 36, {align:'center'});
-  y = 52;
+  const html = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Cairo',sans-serif;background:#fff;color:#0d2b1f;direction:rtl;padding:0;}
+  .header{background:#04342C;color:white;padding:30px 40px;text-align:center;}
+  .header h1{font-size:28px;font-weight:900;margin-bottom:4px;}
+  .header p{font-size:13px;color:#9FE1CB;}
+  .header .meta{font-size:12px;color:#5DCAA5;margin-top:8px;}
+  .prices{display:grid;grid-template-columns:1fr 1fr 1fr;background:#E1F5EE;margin:0;}
+  .price-cell{padding:20px;text-align:center;border-left:1px solid #c8ede0;}
+  .price-cell:last-child{border-left:none;}
+  .price-lbl{font-size:11px;color:#6b9e87;font-weight:700;margin-bottom:6px;}
+  .price-num{font-size:24px;font-weight:900;color:#0d2b1f;font-family:monospace;}
+  .price-num.rec{font-size:30px;color:#0F6E56;}
+  .price-rec-lbl{font-size:10px;color:#0F6E56;font-weight:700;margin-bottom:4px;}
+  .section{padding:24px 40px;border-bottom:1px solid #e2f5ec;}
+  .section-title{background:#0F6E56;color:white;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:900;margin-bottom:14px;display:inline-block;}
+  .section-body{font-size:13px;line-height:2;color:#0d2b1f;white-space:pre-line;background:#f5fdf9;border-radius:10px;padding:16px;}
+  .msg-body{border-right:4px solid #0F6E56;background:#E1F5EE;}
+  .footer{background:#04342C;color:#5DCAA5;text-align:center;padding:16px;font-size:11px;}
+  @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>سعّر — التقرير الكامل</h1>
+  <p>تقرير تسعير احترافي للمؤثرين العرب</p>
+  <div class="meta">${platName} · ${d.followers.toLocaleString()} متابع · ${d.engagement}% تفاعل · ${mktLabel}</div>
+</div>
+<div class="prices">
+  <div class="price-cell">
+    <div class="price-lbl">الحد الأدنى</div>
+    <div class="price-num">$${d.min.toLocaleString()}</div>
+  </div>
+  <div class="price-cell">
+    <div class="price-rec-lbl">✓ السعر الصح</div>
+    <div class="price-num rec">$${d.price.toLocaleString()}</div>
+  </div>
+  <div class="price-cell">
+    <div class="price-lbl">الحد الأقصى</div>
+    <div class="price-num">$${d.max.toLocaleString()}</div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-title">💡 نصايح التفاوض</div>
+  <div class="section-body">${aiReportData.tips || ''}</div>
+</div>
+<div class="section">
+  <div class="section-title">💬 الرسالة الجاهزة للبراند</div>
+  <div class="section-body msg-body">${aiReportData.message || ''}</div>
+</div>
+<div class="section">
+  <div class="section-title">📦 الباقات والأسعار</div>
+  <div class="section-body">${aiReportData.packages || ''}</div>
+</div>
+<div class="section">
+  <div class="section-title">⭐ نصايح خاصة بـ${platName}</div>
+  <div class="section-body">${aiReportData.platformTips || ''}</div>
+</div>
+<div class="footer">SA3ER.COM — أداة تسعير احترافية للمؤثرين العرب</div>
+</body>
+</html>`;
  
-  // الأسعار
-  pdf.setFillColor(225, 245, 238);
-  pdf.rect(margin, y, maxW, 28, 'F');
-  pdf.setTextColor(4, 52, 44);
-  pdf.setFontSize(10);
-  pdf.text('Min: $' + d.min, margin + 10, y + 10);
-  pdf.setFontSize(14);
-  pdf.setFont('helvetica','bold');
-  pdf.text('Recommended: $' + d.price, w/2, y + 14, {align:'center'});
-  pdf.setFontSize(10);
-  pdf.setFont('helvetica','normal');
-  pdf.text('Max: $' + d.max, w - margin - 10, y + 10, {align:'right'});
-  y += 36;
- 
-  const addSection = (title, content) => {
-    if(y > 240) { pdf.addPage(); y = 20; }
-    pdf.setFillColor(15, 110, 86);
-    pdf.rect(margin, y, maxW, 8, 'F');
-    pdf.setTextColor(255,255,255);
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica','bold');
-    pdf.text(title, margin + 4, y + 5.5);
-    y += 12;
-    pdf.setTextColor(13, 43, 31);
-    pdf.setFont('helvetica','normal');
-    pdf.setFontSize(9);
-    const lines = pdf.splitTextToSize(content, maxW - 4);
-    lines.forEach(line => {
-      if(y > 270) { pdf.addPage(); y = 20; }
-      pdf.text(line, margin + 2, y);
-      y += 5.5;
-    });
-    y += 6;
-  };
- 
-  addSection('Negotiation Tips', aiReportData.tips || '');
-  addSection('Ready-to-Send Message', aiReportData.message || '');
-  addSection('Packages & Pricing', aiReportData.packages || '');
-  addSection('Platform Tips', aiReportData.platformTips || '');
- 
-  // فوتر
-  pdf.setFillColor(4, 52, 44);
-  pdf.rect(0, 285, w, 12, 'F');
-  pdf.setTextColor(159, 225, 203);
-  pdf.setFontSize(8);
-  pdf.text('SA3ER.COM — Professional Influencer Pricing Tool', w/2, 292, {align:'center'});
- 
-  pdf.save('TaqreerKamel_' + (d.followers/1000).toFixed(0) + 'K.pdf');
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => { win.focus(); win.print(); };
 }
  
 function buyPDF() {
