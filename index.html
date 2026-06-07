@@ -317,13 +317,65 @@ nav{background:var(--white);border-bottom:1px solid var(--border-light);padding:
     </div>
     <button class="btn-amber" onclick="downloadPDF(false)"><i class="ti ti-download"></i> PDF مجاني بعلامة مائية SA3ER.COM</button>
     <button class="btn-cash" onclick="buyPDF()" style="border-radius:0 0 0 0;"><i class="ti ti-wallet"></i> اشتري النسخة النضيفة بـ 500 جنيه</button>
-    <button class="btn-admin" id="adminBtn" onclick="downloadPDF(true)">🔑 توليد PDF نضيف - للأدمن فقط</button>
+    <button class="btn-admin" id="adminBtn" onclick="generateFullReport()">🔑 توليد التقرير الكامل بـ AI - للأدمن فقط</button>
+  </div>
+ 
+  <!-- ===== تقرير كامل للأدمن ===== -->
+  <div id="fullReportSection" style="display:none;margin-top:16px;">
+    <div class="card" style="border:2px solid var(--teal-600);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:36px;height:36px;background:var(--teal-600);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;">✦</div>
+        <div>
+          <div style="font-size:14px;font-weight:900;color:var(--teal-800);">التقرير الكامل — جاهز للإرسال</div>
+          <div style="font-size:11px;color:var(--text-muted);">تم التوليد بالذكاء الاصطناعي</div>
+        </div>
+      </div>
+      <div id="aiLoadingState" style="text-align:center;padding:30px 0;">
+        <div style="font-size:28px;margin-bottom:10px;">⚡</div>
+        <div style="font-size:14px;font-weight:700;color:var(--teal-600);">Claude بيولد التقرير...</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">ثواني بس</div>
+      </div>
+      <div id="aiReportContent" style="display:none;">
+        <!-- نصايح التفاوض -->
+        <div style="margin-bottom:18px;">
+          <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+            <i class="ti ti-bulb" style="font-size:14px;"></i> نصايح التفاوض المخصصة
+          </div>
+          <div id="aiTips" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--teal-50);border-radius:12px;padding:14px;white-space:pre-line;"></div>
+        </div>
+        <!-- الرسالة الجاهزة -->
+        <div style="margin-bottom:18px;">
+          <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+            <i class="ti ti-message" style="font-size:14px;"></i> رسالة جاهزة للبراند
+          </div>
+          <div id="aiMessage" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--border-light);border-radius:12px;padding:14px;white-space:pre-line;border-right:3px solid var(--teal-600);"></div>
+        </div>
+        <!-- الباقات -->
+        <div style="margin-bottom:18px;">
+          <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+            <i class="ti ti-packages" style="font-size:14px;"></i> تفصيل الباقات والأسعار
+          </div>
+          <div id="aiPackages" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--border-light);border-radius:12px;padding:14px;white-space:pre-line;"></div>
+        </div>
+        <!-- نصايح المنصة -->
+        <div style="margin-bottom:20px;">
+          <div style="font-size:12px;font-weight:900;color:var(--teal-600);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+            <i class="ti ti-star" style="font-size:14px;"></i> نصايح خاصة بالمنصة
+          </div>
+          <div id="aiPlatformTips" style="font-size:13px;line-height:1.8;color:var(--text-primary);background:var(--border-light);border-radius:12px;padding:14px;white-space:pre-line;"></div>
+        </div>
+        <button class="btn-primary" onclick="downloadFullReportPDF()" style="margin-bottom:8px;">
+          <i class="ti ti-download"></i> حمّل PDF كامل وابعته للعميل
+        </button>
+      </div>
+    </div>
   </div>
  
 </div>
  
 <script> 
 let savedData = {};
+let aiReportData = {};
  
 const platformNames = {instagram:'انستجرام',tiktok:'تيك توك',youtube:'يوتيوب',facebook:'فيسبوك',twitter:'تويتر / X'};
 const platformIcons = {instagram:'📸',tiktok:'🎵',youtube:'▶️',facebook:'👤',twitter:'🐦'};
@@ -423,6 +475,161 @@ async function downloadPDF(isPaid) {
     pdf.text('SA3ER.COM - نسخة مجانية', w/2, h/2, {angle: 45, align: 'center'});
   }
   pdf.save(isPaid ? 'MediaKit_Nadeef.pdf' : 'MediaKit_Free.pdf');
+}
+ 
+async function generateFullReport() {
+  const d = savedData;
+  if(!d.followers) { alert('احسب السعر الأول'); return; }
+ 
+  document.getElementById('fullReportSection').style.display = 'block';
+  document.getElementById('aiLoadingState').style.display = 'block';
+  document.getElementById('aiReportContent').style.display = 'none';
+  document.getElementById('fullReportSection').scrollIntoView({behavior:'smooth'});
+ 
+  const platName = platformNames[d.platform] || d.platform;
+  const mktLabel = d.market === 'egypt' ? 'مصر' : 'السوق العربي';
+ 
+  const prompt = `أنت خبير تسعير للمؤثرين في العالم العربي. بناءً على البيانات التالية، اكتب تقريراً احترافياً كاملاً باللغة العربية العامية المصرية.
+ 
+بيانات المؤثر:
+- المنصة: ${platName}
+- عدد المتابعين: ${d.followers.toLocaleString()}
+- معدل التفاعل: ${d.engagement}%
+- السوق: ${mktLabel}
+- الحد الأدنى للسعر: $${d.min}
+- السعر المقترح: $${d.price}
+- الحد الأقصى: $${d.max}
+ 
+اكتب بالضبط 4 أقسام منفصلة، كل قسم يبدأ بعلامة === واسم القسم ===:
+ 
+=== نصايح التفاوض ===
+(اكتب 4 نصايح عملية ومخصصة للأرقام دي، كل نصيحة في سطر جديد تبدأ بـ •)
+ 
+=== الرسالة الجاهزة ===
+(اكتب رسالة واتساب/إيميل جاهزة يبعتها المؤثر للبراند، بأسلوب احترافي وودود، تتضمن الأسعار بالظبط)
+ 
+=== الباقات والأسعار ===
+(اكتب 4 باقات بأسعار مخصصة بناءً على الأرقام، كل باقة في سطر: اسم الباقة: السعر — وصف مختصر)
+ 
+=== نصايح المنصة ===
+(اكتب 3 نصايح خاصة بـ${platName} تساعد المؤثر يحصل على سعر أعلى، كل نصيحة في سطر تبدأ بـ ✓)`;
+ 
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': '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',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || '';
+ 
+    const getSection = (name) => {
+      const rx = new RegExp(`=== ${name} ===\\s*([\\s\\S]*?)(?====|$)`);
+      return (text.match(rx)?.[1] || '').trim();
+    };
+ 
+    aiReportData = {
+      tips: getSection('نصايح التفاوض'),
+      message: getSection('الرسالة الجاهزة'),
+      packages: getSection('الباقات والأسعار'),
+      platformTips: getSection('نصايح المنصة'),
+      raw: text
+    };
+ 
+    document.getElementById('aiTips').textContent = aiReportData.tips;
+    document.getElementById('aiMessage').textContent = aiReportData.message;
+    document.getElementById('aiPackages').textContent = aiReportData.packages;
+    document.getElementById('aiPlatformTips').textContent = aiReportData.platformTips;
+ 
+    document.getElementById('aiLoadingState').style.display = 'none';
+    document.getElementById('aiReportContent').style.display = 'block';
+ 
+  } catch(e) {
+    document.getElementById('aiLoadingState').innerHTML = '<div style="color:red;font-size:13px;">حصل خطأ — جرب تاني</div>';
+  }
+}
+ 
+async function downloadFullReportPDF() {
+  const { jsPDF } = window.jspdf;
+  const d = savedData;
+  const platName = platformNames[d.platform] || d.platform;
+  const mktLabel = d.market === 'egypt' ? 'مصر' : 'عربي عام';
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const w = pdf.internal.pageSize.getWidth();
+  const margin = 20;
+  const maxW = w - margin * 2;
+  let y = 20;
+ 
+  // هيدر
+  pdf.setFillColor(4, 52, 44);
+  pdf.rect(0, 0, w, 40, 'F');
+  pdf.setTextColor(255,255,255);
+  pdf.setFont('helvetica','bold');
+  pdf.setFontSize(20);
+  pdf.text('SA3ER.COM', w/2, 18, {align:'center'});
+  pdf.setFontSize(11);
+  pdf.text('Full Influencer Pricing Report', w/2, 28, {align:'center'});
+  pdf.setFontSize(9);
+  pdf.text(platName + ' | ' + d.followers.toLocaleString() + ' followers | ' + d.engagement + '% eng | ' + mktLabel, w/2, 36, {align:'center'});
+  y = 52;
+ 
+  // الأسعار
+  pdf.setFillColor(225, 245, 238);
+  pdf.rect(margin, y, maxW, 28, 'F');
+  pdf.setTextColor(4, 52, 44);
+  pdf.setFontSize(10);
+  pdf.text('Min: $' + d.min, margin + 10, y + 10);
+  pdf.setFontSize(14);
+  pdf.setFont('helvetica','bold');
+  pdf.text('Recommended: $' + d.price, w/2, y + 14, {align:'center'});
+  pdf.setFontSize(10);
+  pdf.setFont('helvetica','normal');
+  pdf.text('Max: $' + d.max, w - margin - 10, y + 10, {align:'right'});
+  y += 36;
+ 
+  const addSection = (title, content) => {
+    if(y > 240) { pdf.addPage(); y = 20; }
+    pdf.setFillColor(15, 110, 86);
+    pdf.rect(margin, y, maxW, 8, 'F');
+    pdf.setTextColor(255,255,255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica','bold');
+    pdf.text(title, margin + 4, y + 5.5);
+    y += 12;
+    pdf.setTextColor(13, 43, 31);
+    pdf.setFont('helvetica','normal');
+    pdf.setFontSize(9);
+    const lines = pdf.splitTextToSize(content, maxW - 4);
+    lines.forEach(line => {
+      if(y > 270) { pdf.addPage(); y = 20; }
+      pdf.text(line, margin + 2, y);
+      y += 5.5;
+    });
+    y += 6;
+  };
+ 
+  addSection('Negotiation Tips', aiReportData.tips || '');
+  addSection('Ready-to-Send Message', aiReportData.message || '');
+  addSection('Packages & Pricing', aiReportData.packages || '');
+  addSection('Platform Tips', aiReportData.platformTips || '');
+ 
+  // فوتر
+  pdf.setFillColor(4, 52, 44);
+  pdf.rect(0, 285, w, 12, 'F');
+  pdf.setTextColor(159, 225, 203);
+  pdf.setFontSize(8);
+  pdf.text('SA3ER.COM — Professional Influencer Pricing Tool', w/2, 292, {align:'center'});
+ 
+  pdf.save('TaqreerKamel_' + (d.followers/1000).toFixed(0) + 'K.pdf');
 }
  
 function buyPDF() {
